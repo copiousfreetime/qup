@@ -1,0 +1,8 @@
+.autotest
+History.rdoc
+Manifest.txt
+README.rdoc
+Rakefile
+bin/qup
+lib/qup.rb
+test/test_qup.rb
