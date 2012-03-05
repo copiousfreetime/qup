@@ -3,7 +3,7 @@
 begin
   require 'rubygems'
   require 'hoe'
-rescue LoadError 
+rescue LoadError
   abort <<-_
   Developing qup requires the use of rubygems and hoe.
 
@@ -12,12 +12,6 @@ rescue LoadError
 end
 
 Hoe.plugin :doofus, :git, :gemspec2
-
-# Hoe.plugin :compiler
-# Hoe.plugin :gem_prelude_sucks
-# Hoe.plugin :inline
-# Hoe.plugin :racc
-# Hoe.plugin :rubyforge
 
 Hoe.spec 'qup' do
   developer 'Jeremy Hinegardner', 'jeremy@copiousfreetime.org'
@@ -29,7 +23,7 @@ Hoe.spec 'qup' do
   self.extra_rdoc_files = [ self.readme_file, self.history_file ]
 
   # test with minitest
-  self.extra_dev_deps << [ 'minitest', '~> 2.0.2']
+  self.extra_dev_deps << [ 'minitest', '~> 2.11.3']
   self.testlib = :minitest
 
 end
