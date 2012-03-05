@@ -1,8 +1,9 @@
 .autotest
-History.rdoc
+.gemtest
+HISTORY.rdoc
 Manifest.txt
 README.rdoc
 Rakefile
 bin/qup
 lib/qup.rb
-test/test_qup.rb
+test/qup_spec.rb
