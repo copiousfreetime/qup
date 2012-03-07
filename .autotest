@@ -5,6 +5,7 @@ require 'autotest/restart'
 
 Autotest.add_hook :initialize do |at|
 
+  at.libs    = %w[lib spec].join(File::PATH_SEPARATOR)
   at.testlib = 'minitest/autorun'
 
   at.add_exception 'coverage.info'
@@ -13,16 +14,28 @@ Autotest.add_hook :initialize do |at|
 
   at.clear_mappings
 
-  at.add_mapping(%r|^test/.*_spec\.rb$|) do |filename, _|
+  # file in /spec -> run it
+  at.add_mapping(%r|^spec/.*_spec\.rb$|) do |filename, _|
     filename
   end
 
+  # file in /lib -> run test in /spec
   at.add_mapping(%r|^lib/(.*)\.rb$|) do |_, match|
-    [ "test/#{match[1]}_spec.rb" ]
+    at.files_matching %r|^spec/#{match[1]}_spec.rb|
   end
 
-  at.add_mapping(%r|^test/spec_helper\.rb|) do
-    at.files_matching( %r|^test/.*_spec\.rb| )
+  at.add_mapping(%r|^spec/spec_helper\.rb|) do
+    at.files_matching( %r|^spec/.*_spec\.rb| )
   end
+
+  # Make the class map for things in lib
+  class_map = {}
+  sep = File::SEPARATOR
+  Dir.glob("lib/**/*.rb").each do |f|
+    c = f.sub(/lib#{sep}/,'').sub(/\.rb$/,'').split sep
+    c = c.map { |path| path.split(/_|(\d+)/).map { |seq| seq.capitalize }.join }
+    class_map[c.join("::")] = f
+  end
+  at.extra_class_map = class_map
 end
 
