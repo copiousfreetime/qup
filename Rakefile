@@ -22,6 +22,8 @@ Hoe.spec 'qup' do
 
   self.extra_rdoc_files = [ self.readme_file, self.history_file ]
 
+  self.extra_dpes << [ 'maildir', '~> 2.0.0' ]
+
   # test with rspec
   self.extra_dev_deps << [ 'rspec', '~> 2.8.0']
   self.testlib = :rspec
