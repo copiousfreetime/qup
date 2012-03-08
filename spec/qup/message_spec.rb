@@ -1,15 +1,13 @@
 require 'spec_helper'
 
 describe Qup::Message do
-  before do
-    @m = Qup::Message.new( "my unique key", "some data" )
-  end
+  let( :message ) { Qup::Message.new( "my unique key", "some data" ) }
 
   it "has a key" do
-    @m.key.should == 'my unique key' 
+    message.key.should == 'my unique key'
   end
 
   it 'has data' do
-    @m.data.should == 'some data'
+    message.data.should == 'some data'
   end
 end

@@ -1,29 +1,31 @@
 require 'spec_helper'
 
-describe Qup::Producer do
+describe Qup::Consumer do
+
+  let( :path     ) { temp_dir( "qup-consumer" )      }
+  let( :queue    ) { ::Qup::Queue.new( path, 'bar' ) }
+  let( :producer ) { queue.producer                  }
+  let( :consumer ) { queue.consumer                  }
+
   before do
-    @path  = temp_dir( "qup-producer" )
-    @queue = ::Qup::Queue.new( @path, 'bar' )
-    p = @queue.producer
-    p.produce( 'consumption' )
-    @consumer = @queue.consumer
+    producer.produce( 'consumption' )
   end
 
   after do
-    FileUtils.rm_rf( @path )
+    FileUtils.rm_rf( path )
   end
 
   it "consumes an item from the queue" do
-    msg = @consumer.consume
+    msg = consumer.consume
     msg.data.should eq 'consumption'
-    @queue.acknowledge msg
-    @queue.depth.should eq 0
+    queue.acknowledge msg
+    queue.depth.should eq 0
   end
 
   it "consumes auto-acknowledges msgs in a block" do
-    @consumer.consume do |msg|
+    consumer.consume do |msg|
       msg.data.should eq 'consumption'
     end
-    @queue.depth.should eq 0
+    queue.depth.should eq 0
   end
 end
