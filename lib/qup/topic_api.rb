@@ -22,13 +22,17 @@ module Qup
   #   message2 = sub2.consume
   #
   module TopicAPI
+    #--------------------------------------------------------------------------
+    # The API that Adapters must implement
+    #--------------------------------------------------------------------------
 
     # Public: Creates a Publisher for the Topic
     #
     # Returns a new Publisher
     def publisher
-      Publisher.new( self )
+      raise NotImplementedError, "please implement 'publisher'"
     end
+
 
     # Public: Create a subscriber for the Topic
     #
@@ -42,13 +46,9 @@ module Qup
     #
     # Returns a Subscriber
     def subscriber( name )
-      Subscriber.new( self, name )
+      raise NotImplementedError, "please implement 'subscriber'"
     end
 
-
-    #--------------------------------------------------------------------------
-    # The API that Adapters must implement
-    #--------------------------------------------------------------------------
 
     # Public: the name of the Topic
     #
@@ -82,7 +82,7 @@ module Qup
     #
     # Returns nothing
     def publish( message )
-      raise NotImplementedError, "please implement 'subscriber_count'"
+      raise NotImplementedError, "please implement 'publish'"
     end
 
   end
