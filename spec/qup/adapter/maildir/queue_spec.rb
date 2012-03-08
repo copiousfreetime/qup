@@ -2,11 +2,14 @@ require 'spec_helper'
 
 describe Qup::Adapter::Maildir::Queue do
 
-  let( :path  ) { temp_dir( "qup-queue" )         }
-  let( :queue ) { ::Qup::Adapter::Maildir::Queue.new( path, 'foo' ) }
+  let( :path    ) { temp_dir( "qup-queue" )            }
+  let( :uri     ) { URI.parse( "maildir://#{path}" )   }
+  let( :adapter ) { ::Qup::Adapter::Maildir.new( uri ) }
+
+  let( :queue ) { adapter.queue( 'foo' ) }
 
   after do
-    FileUtils.rm_rf( path )
+    queue.destroy
   end
 
   it "has a name" do

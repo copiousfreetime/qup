@@ -89,5 +89,18 @@ module Qup
     def closed?
       @adapter.closed?
     end
+    # Public: Delete the given Queue
+    #
+    # queue - the Queue to remove from the Session
+    #
+    # This removes all items from the Queue, and if possible removes the
+    # existence of the Queue from the system. For some Adapters this may not be
+    # possible, and in that case the method should do nothing.
+    #
+    # Returns nothing.
+    def destroy_queue( queue )
+      @queues.delete( queue.name )
+      @adapter.destroy_topic( topic )
+    end
   end
 end

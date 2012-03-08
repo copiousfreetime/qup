@@ -58,6 +58,16 @@ module Qup
       raise NotImplementedError, "please implement 'depth'"
     end
 
+    # Public: destroy the Queue if possible
+    #
+    # This will clear the Queue and remove it from the system if possible
+    #
+    # Returns nothing.
+    def destroy
+      raise NotImplementedError, "please implement 'destroy'"
+    end
+
+
     # Internal: Put an item onto the Queue
     #
     # message - the data to put onto the queue

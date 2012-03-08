@@ -24,6 +24,13 @@ class Qup::Adapter::Maildir
       @maildir    = ::Maildir.new( @queue_path, true )
     end
 
+    # Internal: Remove the Queue from the system
+    #
+    # Returns nothing.
+    def destroy
+      @queue_path.rmtree
+    end
+
     # Internal: return the number of Messages on the Queue
     #
     # Returns an integer of the Queue depth
