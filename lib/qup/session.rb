@@ -44,15 +44,10 @@ module Qup
     # Yields the Queue.
     #
     # name    - The String name of the Queue to connect/create
-    # options - The Hash of options use to configure the Queue (default: {}).
-    #           Currently not used.
     #
     # Returns a new Queue instance
-    def queue( name, options = {}, &block )
-      raise Qup::Session::ClosedError, "Session connected to #{@uri} is closed" if closed?
-      q = (@queues[name] ||= @adapter.queue( name ))
-      return q unless block_given?
-      yield q
+    def queue( name, &block )
+      destination( name, :queue, @queues, &block )
     end
 
     # Public: Allocate a new Topic
@@ -63,15 +58,10 @@ module Qup
     # Yields the Topic.
     #
     # name    - The String name of the Topic to connect/create
-    # options - The Hash of options use to configure the Topic (defualt: {}).
-    #           Currently not used.
     #
     # Returns a new Topic instance
-    def topic( name, options = {}, &block )
-      raise Qup::Session::ClosedError, "Session connected to #{@uri} is closed" if closed?
-      t = (@topics[name] ||= @adapter.topic( name ) )
-      return t unless block_given?
-      yield t
+    def topic( name, &block )
+      destination( name, :topic, @topics, &block )
     end
 
     # Public: Close the Session
@@ -90,5 +80,14 @@ module Qup
       @adapter.closed?
     end
 
+    #######
+    private
+    #######
+    def destination( name, type, collection, &block )
+      raise Qup::Session::ClosedError, "Session connected to #{@uri} is closed" if closed?
+      d = (collection[name] ||= @adapter.send( type, name ))
+      return d unless block_given?
+      yield d
+    end
   end
 end
