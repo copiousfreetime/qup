@@ -25,29 +25,43 @@ describe Qup::Adapter::Maildir::Queue do
     queue.depth.should eq 1
   end
 
-  it "can have a message consumed" do
-    queue.produce( "consumeable message" )
-    queue.depth.should eq 1
+  describe '#consume' do
+    before do
+      queue.produce( "consumeable message" )
+      queue.depth.should eq 1
+    end
 
-    msg = queue.consume
-    msg.data.should eq "consumeable message"
-    queue.depth.should eq 1
+    it 'normally' do
+      msg = queue.consume
+      msg.data.should eq "consumeable message"
+      queue.depth.should eq 1
+    end
+
+    it 'with block it auto acknowledges' do
+      queue.consume do |msg|
+        msg.data.should eq 'consumeable message'
+        queue.depth.should eq 1
+      end
+      queue.depth.should eq 0
+    end
   end
 
-  it "can acknowledge a consumed message" do
-    queue.produce( "acknowledgeable message" )
-    queue.depth.should eq 1
+  describe "#acknowledge" do
+    it "acks a message" do
+      queue.produce( "acknowledgeable message" )
+      queue.depth.should eq 1
 
-    msg = queue.consume
-    msg.data.should eq "acknowledgeable message"
-    queue.depth.should eq 1
+      msg = queue.consume
+      msg.data.should eq "acknowledgeable message"
+      queue.depth.should eq 1
 
-    queue.acknowledge( msg )
-    queue.depth.should eq 0
-  end
+      queue.acknowledge( msg )
+      queue.depth.should eq 0
+    end
 
-  it "raises an error if you attemp to to acknowledg an unconsumed message" do
-    msg = queue.produce( 'unconsumed' )
-    lambda { queue.acknowledge( msg ) }.should raise_error(Qup::Error)
+    it "raises an error if you attempt to to acknowledge an unconsumed message" do
+      msg = queue.produce( 'unconsumed' )
+      lambda { queue.acknowledge( msg ) }.should raise_error(Qup::Error)
+    end
   end
 end
