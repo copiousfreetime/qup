@@ -29,11 +29,11 @@ module Qup
       @uri       = URI.parse( uri )
       @root_path = Pathname.new( @uri.path )
 
-      FileUtils.mkdir_p( @root_path )
+      adapter_klass = Qup::Adapters[@uri.scheme]
+      @adapter      = adapter_klass.new( @uri, options )
+
       @queues  = Hash.new
       @topics  = Hash.new
-
-      @closed  = false
     end
 
     # Public: Allocate a new Queue
@@ -50,7 +50,7 @@ module Qup
     # Returns a new Queue instance
     def queue( name, options = {}, &block )
       raise Qup::Session::ClosedError, "Session connected to #{@uri} is closed" if closed?
-      q = (@queues[name] ||= Queue.new( @root_path , name ))
+      q = (@queues[name] ||= @adapter.queue( name ))
       return q unless block_given?
       yield q
     end
@@ -69,7 +69,7 @@ module Qup
     # Returns a new Topic instance
     def topic( name, options = {}, &block )
       raise Qup::Session::ClosedError, "Session connected to #{@uri} is closed" if closed?
-      t = (@topics[name] ||= Topic.new( @root_path, name ) )
+      t = (@topics[name] ||= @adapter.topic( name ) )
       return t unless block_given?
       yield t
     end
@@ -80,14 +80,14 @@ module Qup
     #
     # Returns nothing
     def close
-      @closed = true
+      @adapter.close
     end
 
     # Public: Is the Session closed?
     #
     # Returns true if the session is closed, false otherwise.
     def closed?
-      @closed
+      @adapter.closed?
     end
   end
 end

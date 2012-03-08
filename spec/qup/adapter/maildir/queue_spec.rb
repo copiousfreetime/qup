@@ -1,17 +1,16 @@
 require 'spec_helper'
 
-describe Qup::Queue do
+describe Qup::Adapter::Maildir::Queue do
 
   let( :path  ) { temp_dir( "qup-queue" )         }
-  let( :queue ) { ::Qup::Queue.new( path, 'foo' ) }
+  let( :queue ) { ::Qup::Adapter::Maildir::Queue.new( path, 'foo' ) }
 
   after do
     FileUtils.rm_rf( path )
   end
 
   it "has a name" do
-    q = Qup::Queue.new( path, 'foo' )
-    q.name.should eq 'foo'
+    queue.name.should eq 'foo'
 
     dirname = File.join( path, 'foo' )
     File.directory?( dirname ).should be_true

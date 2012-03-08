@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe Qup::Topic do
+describe Qup::Adapter::Maildir::Topic do
 
   let( :path  ) { temp_dir( "qup-topic" ) }
 
   before do
-    @topic = ::Qup::Topic.new( path, 't' )
+    @topic = ::Qup::Adapter::Maildir::Topic.new( path, 't' )
   end
 
   after do

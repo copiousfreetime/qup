@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Qup::Consumer do
 
   let( :path     ) { temp_dir( "qup-consumer" )      }
-  let( :queue    ) { ::Qup::Queue.new( path, 'bar' ) }
+  let( :queue    ) { ::Qup::Adapter::Maildir::Queue.new( path, 'bar' ) }
   let( :producer ) { queue.producer                  }
   let( :consumer ) { queue.consumer                  }
 
