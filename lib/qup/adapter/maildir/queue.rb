@@ -62,7 +62,10 @@ class Qup::Adapter::Maildir
 
     # Internal: Put an item onto the Queue
     #
-    # message - the data to put onto the queue
+    # message - the data to put onto the queue.
+    #
+    # The 'message' that is passed in is wrapped in a Qup::Message before being
+    # stored.
     #
     # A user of the Qup API should use a Producer instance to put items onto the
     # queue.
@@ -74,13 +77,9 @@ class Qup::Adapter::Maildir
     end
 
 
-    # Internal: Retrieve an item from the Queue
+    # Internal: Retrieve a Message from the Queue
     #
-    # options - a Hash of options determining how long to wait for a Message
-    #           :block   - should we block until a Message is available
-    #                      (default: true )
-    #           :timeout - how long to wait for a Message, only valid if
-    #                      :block is false
+    # Yields a Message
     #
     # A user of the Qup API should use a Consumer instance to retrieve items
     # from the Queue.
