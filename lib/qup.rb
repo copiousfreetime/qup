@@ -1,5 +1,6 @@
-class Qup
+module Qup
   VERSION = '1.0.0'
+  class Error < StandardError; end
 
   # Public: Connect to the given provider
   #
@@ -13,7 +14,11 @@ class Qup
   #   session = Qup.connect( 'maildir:///tmp/qup' )
   #
   # Returns a Session.
-  def connect( uri, &block )
+  def self.connect( uri, &block )
   end
-
 end
+
+require 'qup/session'
+require 'qup/message'
+require 'qup/queue'
+require 'qup/producer'

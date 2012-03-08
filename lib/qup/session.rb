@@ -1,3 +1,5 @@
+require 'uri'
+require 'pathname'
 module Qup
   # Public: Manage communicating with a provider
   #
@@ -13,13 +15,20 @@ module Qup
   # create its own Session.
   class Session
 
+    # Public: The URI of this Session
+    attr_reader :uri
+
     # Public: Create a new Session
     #
-    # uri - The connection String used to connectot to appropriate provider
+    # uri     - The connection String used to connectot to appropriate provider
+    # options - The Hash of options that are passed to the underyling Adapter
     #
     # Returns a new Session
-    def initialize( uri )
-      @adapter = Adapter.for( uri )
+    def initialize( uri, options = {} )
+      @uri       = URI.parse( uri )
+      @root_path = Pathname.new( @uri.path )
+
+      FileUtils.mkdir_p( @root_path )
       @queues  = Hash.new
       @topics  = Hash.new
     end
@@ -37,7 +46,7 @@ module Qup
     #
     # Returns a new Queue instance
     def queue( name, options = {}, &block )
-      @queues[name] ||= Queue.new( self, name )
+      @queues[name] ||= Queue.new( @root_path , name )
     end
 
     # Public: Allocate a new Topic
