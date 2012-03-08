@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'qup/shared_adapter_examples'
 
-describe Qup::Adapter::Maildir::Queue do
+describe Qup::Adapter::Maildir do
 
   let( :path    ) { temp_dir( "qup-queue" )            }
   let( :uri     ) { URI.parse( "maildir://#{path}" )   }
