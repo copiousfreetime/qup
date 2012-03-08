@@ -1,4 +1,5 @@
 require 'qup/adapter'
+require 'maildir'
 
 class Qup::Adapter
   # Internal: The backing adapter for Qup that uses Maildir as a the messaging

@@ -1,4 +1,3 @@
-require 'maildir'
 require 'qup/producer'
 require 'qup/consumer'
 
