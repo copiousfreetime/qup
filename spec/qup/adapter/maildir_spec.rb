@@ -9,6 +9,5 @@ describe Qup::Adapter::Maildir::Queue do
   # Needed to support the Shared Examples
   let( :adapter ) { ::Qup::Adapter::Maildir.new( uri ) }
 
-  include_context "::Qup::Adapter Context"
   it_behaves_like ::Qup::Adapter
 end

@@ -4,9 +4,6 @@ require 'spec_helper'
 #
 #   let( :adapter )
 #
-shared_context "::Qup::Adapter Context" do
-end
-
 shared_examples ::Qup::Adapter do
   it 'is registered as an adapter' do
     Qup::Adapters[uri.scheme].should eq adapter.class
