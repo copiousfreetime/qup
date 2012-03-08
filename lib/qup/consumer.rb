@@ -26,5 +26,17 @@ module Qup
     def consume(&block)
       @queue.consume(&block)
     end
+
+    # Public: Acknowledge a consumed message
+    #
+    # message - The message you are acknowledging
+    #
+    # A consumed message must be acknowledge so the back end system can
+    # be assured that the message has been a fully processed.
+    #
+    # Returns nothing.
+    def acknowledge( message )
+      @queue.acknowledge( message )
+    end
   end
 end
