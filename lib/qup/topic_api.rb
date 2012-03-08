@@ -58,12 +58,23 @@ module Qup
     end
 
 
+    # Public: destroy the Topic if possible
+    #
+    # This will remove the Topic from the system if possible
+    #
+    # Returns nothing.
+    def destroy
+      raise NotImplementedError, "please implement 'destroy'"
+    end
+
+
     # Public: Return the number of Subscribers to this Topic
     #
     # Returns integer
     def subscriber_count
       raise NotImplementedError, "please implement 'subscriber_count'"
     end
+
 
     # Internal: Publish a Message to all the Subscribers
     #
@@ -73,5 +84,6 @@ module Qup
     def publish( message )
       raise NotImplementedError, "please implement 'subscriber_count'"
     end
+
   end
 end

@@ -2,14 +2,16 @@ require 'spec_helper'
 
 describe Qup::Adapter::Maildir::Topic do
 
-  let( :path  ) { temp_dir( "qup-topic" ) }
+  let( :path    ) { temp_dir( "qup-topic" ) }
+  let( :uri     ) { URI.parse( "maildir://#{path}" )   }
+  let( :adapter ) { ::Qup::Adapter::Maildir.new( uri ) }
 
   before do
-    @topic = ::Qup::Adapter::Maildir::Topic.new( path, 't' )
+    @topic = adapter.topic( 't' )
   end
 
   after do
-    FileUtils.rm_rf( path )
+    @topic.destroy
   end
 
   it "has a name" do

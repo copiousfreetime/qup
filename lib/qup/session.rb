@@ -89,6 +89,21 @@ module Qup
     def closed?
       @adapter.closed?
     end
+
+    # Public: Delete the given Topic
+    #
+    # topic - the Topic to remove from the Session
+    #
+    # This removes the existence of the Topic from the system. For some Adapters
+    # this may not be possible, and in that case the method should do nothing.
+    #
+    # Returns nothing.
+    def destroy_topic( topic )
+      @topics.delete( topic.name )
+      @adapter.destroy_topic( topic )
+    end
+
+
     # Public: Delete the given Queue
     #
     # queue - the Queue to remove from the Session

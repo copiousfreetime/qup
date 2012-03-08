@@ -23,7 +23,15 @@ class Qup::Adapter::Maildir
       @subscribers = Hash.new
 
       FileUtils.mkdir_p( @topic_path )
+    end
 
+    # Public: Destroy the Topic
+    #
+    # If possible remove the existence of the Topic from the System
+    #
+    # Returns nothing.
+    def destroy
+      @topic_path.rmtree
     end
 
     # Public: Creates a Publisher for the Topic
