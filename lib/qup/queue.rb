@@ -23,9 +23,10 @@ module Qup
     #
     # Returns a new Queue.
     def initialize( root_path, name )
-      @root_path = Pathname.new( root_path )
-      @name      = name
-      @maildir   = ::Maildir.new( @root_path + @name, true )
+      @root_path  = Pathname.new( root_path )
+      @name       = name
+      @queue_path = @root_path + @name
+      @maildir    = ::Maildir.new( @queue_path, true )
     end
 
     # Public: create a Producer for this Queue
