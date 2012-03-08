@@ -14,6 +14,7 @@ module Qup
   # At the moment, a Session is not considered threadsafe, so each Thread should
   # create its own Session.
   class Session
+    class ClosedError < Qup::Error; end
 
     # Public: The URI of this Session
     attr_reader :uri
@@ -28,7 +29,9 @@ module Qup
       @uri       = URI.parse( uri )
       @root_path = Pathname.new( @uri.path )
 
-      FileUtils.mkdir_p( @root_path )
+      adapter_klass = Qup::Adapters[@uri.scheme]
+      @adapter      = adapter_klass.new( @uri, options )
+
       @queues  = Hash.new
       @topics  = Hash.new
     end
@@ -41,12 +44,10 @@ module Qup
     # Yields the Queue.
     #
     # name    - The String name of the Queue to connect/create
-    # options - The Hash of options use to configure the Queue (default: {}).
-    #           Currently not used.
     #
     # Returns a new Queue instance
-    def queue( name, options = {}, &block )
-      @queues[name] ||= Queue.new( @root_path , name )
+    def queue( name, &block )
+      destination( name, :queue, @queues, &block )
     end
 
     # Public: Allocate a new Topic
@@ -57,12 +58,10 @@ module Qup
     # Yields the Topic.
     #
     # name    - The String name of the Topic to connect/create
-    # options - The Hash of options use to configure the Topic (defualt: {}).
-    #           Currently not used.
     #
     # Returns a new Topic instance
-    def topic( name, options = {}, &block )
-      @topics[name] ||= Topic.new( @root_path, name )
+    def topic( name, &block )
+      destination( name, :topic, @topics, &block )
     end
 
     # Public: Close the Session
@@ -71,12 +70,24 @@ module Qup
     #
     # Returns nothing
     def close
+      @adapter.close
     end
 
     # Public: Is the Session closed?
     #
     # Returns true if the session is closed, false otherwise.
     def closed?
+      @adapter.closed?
+    end
+
+    #######
+    private
+    #######
+    def destination( name, type, collection, &block )
+      raise Qup::Session::ClosedError, "Session connected to #{@uri} is closed" if closed?
+      d = (collection[name] ||= @adapter.send( type, name ))
+      return d unless block_given?
+      yield d
     end
   end
 end

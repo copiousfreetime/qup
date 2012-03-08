@@ -18,11 +18,14 @@ module Qup
   end
 end
 
-require 'qup/session'
-require 'qup/message'
-require 'qup/queue'
-require 'qup/topic'
-require 'qup/producer'
+require 'qup/adapter'
 require 'qup/consumer'
-require 'qup/subscriber'
+require 'qup/message'
+require 'qup/producer'
 require 'qup/publisher'
+require 'qup/queue_api'
+require 'qup/session'
+require 'qup/subscriber'
+require 'qup/topic_api'
+
+require 'qup/adapter/maildir'

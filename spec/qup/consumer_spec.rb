@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Qup::Consumer do
 
   let( :path     ) { temp_dir( "qup-consumer" )      }
-  let( :queue    ) { ::Qup::Queue.new( path, 'bar' ) }
+  let( :queue    ) { ::Qup::Adapter::Maildir::Queue.new( path, 'bar' ) }
   let( :producer ) { queue.producer                  }
   let( :consumer ) { queue.consumer                  }
 
@@ -22,10 +22,19 @@ describe Qup::Consumer do
     queue.depth.should eq 0
   end
 
+  it "acknowledges messages it has consumed" do
+    msg = consumer.consume
+    msg.data.should eq 'consumption'
+    queue.depth.should eq 1
+    consumer.acknowledge( msg )
+    queue.depth.should eq 0
+  end
+
   it "consumes auto-acknowledges msgs in a block" do
     consumer.consume do |msg|
       msg.data.should eq 'consumption'
     end
     queue.depth.should eq 0
   end
+
 end

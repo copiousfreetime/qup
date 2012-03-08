@@ -1,16 +1,23 @@
 require 'spec_helper'
 
-describe Qup::Topic do
-
-  let( :path  ) { temp_dir( "qup-topic" ) }
+# The Queue share contxt requires that the context is include in define:
+#
+#   let( :adapter )
+#
+shared_context "::Qup::Topic Context" do
+  let( :adapter ) { ::Qup::Adapter::Maildir.new( uri ) }
 
   before do
-    @topic = ::Qup::Topic.new( path, 't' )
+    @topic = adapter.topic( 't' )
   end
 
   after do
-    FileUtils.rm_rf( path )
+    @topic.destroy
   end
+end
+
+
+shared_examples ::Qup::TopicAPI do
 
   it "has a name" do
     @topic.name.should == 't'
@@ -28,7 +35,7 @@ describe Qup::Topic do
 
   it "creates publisher" do
     p = @topic.publisher
-    p.topic.should == @topic
+    p.topic.should eq @topic
   end
 
   it "sends a copy of the message to every subscriber" do
@@ -38,10 +45,9 @@ describe Qup::Topic do
 
     p.publish( "hi all" )
     m1 = s1.consume
-    m1.data.should == "hi all"
+    m1.data.should eq "hi all"
 
     m2 = s2.consume
-    m2.data.should == "hi all"
+    m2.data.should eq "hi all"
   end
-
 end

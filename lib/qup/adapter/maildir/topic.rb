@@ -1,10 +1,11 @@
-module Qup
+class Qup::Adapter::Maildir
   #
   # Public: A Topic for use in a publish-subscribe Messaging
   #
   # The topic delivers each Message that it is give to each and every Subscriber
   #
   class Topic
+    include Qup::TopicAPI
 
     # Public: the name of the Topic
     attr_reader :name
@@ -16,20 +17,28 @@ module Qup
     #
     # Returns a new Topic.
     def initialize( root_path, name )
-      @root_path   = Pathname.new( root_path )
+      @root_path   = ::Pathname.new( root_path )
       @name        = name
       @topic_path  = @root_path + @name
       @subscribers = Hash.new
 
       FileUtils.mkdir_p( @topic_path )
+    end
 
+    # Public: Destroy the Topic
+    #
+    # If possible remove the existence of the Topic from the System
+    #
+    # Returns nothing.
+    def destroy
+      @topic_path.rmtree
     end
 
     # Public: Creates a Publisher for the Topic
     #
     # Returns a new Publisher
     def publisher
-      Publisher.new( self )
+      ::Qup::Publisher.new( self )
     end
 
     # Public: Create a subscriber for the Topic
@@ -44,7 +53,7 @@ module Qup
     #
     # Returns a Subscriber
     def subscriber( name )
-      Subscriber.new( self, sub_queue( name )  )
+      ::Qup::Subscriber.new( self, sub_queue( name )  )
     end
 
     # Public: Return the number of Subscribers to this Topic
@@ -70,7 +79,7 @@ module Qup
     #######
 
     def sub_queue( name )
-      @subscribers[name] ||= ::Qup::Queue.new( @topic_path, name )
+      @subscribers[name] ||= ::Qup::Adapter::Maildir::Queue.new( @topic_path, name )
     end
   end
 end
