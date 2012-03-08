@@ -19,10 +19,17 @@ describe Qup::Adapter::Maildir::Queue do
     File.directory?( dirname ).should be_true
   end
 
-  it "can have a message added to it" do
+  it "#produce" do
     queue.depth.should eq 0
     queue.produce( "a new message" )
     queue.depth.should eq 1
+  end
+
+  it "#flush" do
+    10.times { |x| queue.produce( "message #{x}" ) }
+    queue.depth.should eq 10
+    queue.flush
+    queue.depth.should eq 0
   end
 
   describe '#consume' do

@@ -58,6 +58,16 @@ module Qup
       raise NotImplementedError, "please implement 'depth'"
     end
 
+
+    # Public: empty all the messages from the Queue, this does not consume them,
+    # this removes the from the Queue
+    #
+    # Returns nothing
+    def flush
+      raise NotImplementedError, "please implement 'flush'"
+    end
+
+
     # Public: destroy the Queue if possible
     #
     # This will clear the Queue and remove it from the system if possible
@@ -80,6 +90,7 @@ module Qup
       raise NotImplementedError, "please implement 'produce'"
     end
 
+
     # Internal: Retrieve an item from the Queue
     #
     # options - a Hash of options determining how long to wait for a Message
@@ -95,6 +106,7 @@ module Qup
     def consume(&block)
       raise NotImplementedError, "please implement 'consume'"
     end
+
 
     # Internal: Acknowledge that message is completed and remove it from the
     # Queue.

@@ -24,12 +24,27 @@ class Qup::Adapter::Maildir
       @maildir    = ::Maildir.new( @queue_path, true )
     end
 
+
     # Internal: Remove the Queue from the system
     #
     # Returns nothing.
     def destroy
       @queue_path.rmtree
     end
+
+
+    # Internal: Remove all messages from the Queue
+    #
+    # Returns nothing.
+    def flush
+      ::Maildir::SUBDIRS.each do |sub|
+        dir = Pathname.new( File.join( @maildir.path, sub.to_s ))
+        dir.children.each do |p|
+          p.delete if p.file?
+        end
+      end
+    end
+
 
     # Internal: return the number of Messages on the Queue
     #
@@ -44,6 +59,7 @@ class Qup::Adapter::Maildir
       return total
     end
 
+
     # Internal: Put an item onto the Queue
     #
     # message - the data to put onto the queue
@@ -56,6 +72,7 @@ class Qup::Adapter::Maildir
       msg = @maildir.add( message )
       return ::Qup::Message.new( msg.key, msg.data )
     end
+
 
     # Internal: Retrieve an item from the Queue
     #
@@ -82,6 +99,7 @@ class Qup::Adapter::Maildir
       end
     end
 
+
     # Internal: Acknowledge that message is completed and remove it from the
     # Queue.
     #
@@ -94,7 +112,9 @@ class Qup::Adapter::Maildir
       md_message.destroy
     end
 
+    #######
     private
+    #######
 
     def yield_message( message, &block )
       yield message
