@@ -1,7 +1,13 @@
 module Qup
   # Public: A Publisher produces messages on a Topic
   #
+  # Example:
+  #
+  #   pub = topic.publisher
+  #   pub.published( my_message )
+  #
   class Publisher
+
     # Public: The Topic this Publisher publishes to.
     attr_reader :topic
 

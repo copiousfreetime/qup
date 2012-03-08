@@ -1,5 +1,11 @@
 module Qup
   # Public: Produces items for a queue
+  #
+  # Examples:
+  #
+  #   producer = queue.producer
+  #   producer.produce( my_message )
+  #
   class Producer
     # Public: Create a new Producer
     #
