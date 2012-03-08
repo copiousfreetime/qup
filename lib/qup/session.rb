@@ -62,7 +62,7 @@ module Qup
     #
     # Returns a new Topic instance
     def topic( name, options = {}, &block )
-      @topics[name] ||= Topic.new( self, name )
+      @topics[name] ||= Topic.new( @root_path, name )
     end
 
     # Public: Close the Session

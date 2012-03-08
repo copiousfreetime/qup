@@ -21,4 +21,8 @@ end
 require 'qup/session'
 require 'qup/message'
 require 'qup/queue'
+require 'qup/topic'
 require 'qup/producer'
+require 'qup/consumer'
+require 'qup/subscriber'
+require 'qup/publisher'
