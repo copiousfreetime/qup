@@ -18,4 +18,11 @@ describe "Not Implementing the Adapter API" do
       lambda { api.send( method ) }.should raise_error( NotImplementedError, "please implement '#{method}'" )
     end
   end
+
+  %w[ queue topic ].each do |method|
+    it "##{method} kaboom!" do
+      lambda { api.send( method, 'foo' ) }.should raise_error( NotImplementedError, "please implement '#{method}'" )
+    end
+  end
+
 end

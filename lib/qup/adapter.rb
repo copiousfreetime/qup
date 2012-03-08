@@ -16,12 +16,34 @@ module Qup
       Adapters[name.to_s] ||= self
     end
 
+
+    # Public: Create a Queue with the given name
+    #
+    # name - then name of the Queue to create
+    #
+    # Returns a Qup::QueueAPI compatible object
+    def queue( name )
+      raise NotImplementedError, "please implement 'queue'"
+    end
+
+
+    # Public: Create a Topic with the given name
+    #
+    # name - then name of the Topic to create
+    #
+    # Returns a Qup::TopicAPI compatible object
+    def topic( name )
+      raise NotImplementedError, "please implement 'topic'"
+    end
+
+
     # Public: close the Adapter for further use
     #
     # Returns nothing
     def close
       raise NotImplementedError, "please implement 'close'"
     end
+
 
     # Public: is the Adapter closed
     #
