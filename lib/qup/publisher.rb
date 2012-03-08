@@ -4,7 +4,7 @@ module Qup
   # Example:
   #
   #   pub = topic.publisher
-  #   pub.published( my_message )
+  #   pub.publish( my_message )
   #
   class Publisher
 
