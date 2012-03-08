@@ -1,5 +1,4 @@
-require 'minitest/spec'
-require 'minitest/pride'
+require "rspec/autorun"
 require 'qup'
 
 require 'tmpdir'

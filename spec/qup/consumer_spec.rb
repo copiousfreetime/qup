@@ -6,6 +6,7 @@ describe Qup::Producer do
     @queue = ::Qup::Queue.new( @path, 'bar' )
     p = @queue.producer
     p.produce( 'consumption' )
+    @consumer = @queue.consumer
   end
 
   after do
@@ -13,16 +14,16 @@ describe Qup::Producer do
   end
 
   it "consumes an item from the queue" do
-    msg = @queue.consume
-    msg.data.must_equal 'consumption'
+    msg = @consumer.consume
+    msg.data.should eq 'consumption'
     @queue.acknowledge msg
-    @queue.depth.must_equal 0
+    @queue.depth.should eq 0
   end
 
   it "consumes auto-acknowledges msgs in a block" do
-    @queue.consume do |msg|
-      msg.data.must_equal 'consumption'
+    @consumer.consume do |msg|
+      msg.data.should eq 'consumption'
     end
-    @queue.depth.must_equal 0
+    @queue.depth.should eq 0
   end
 end

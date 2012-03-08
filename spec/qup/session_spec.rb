@@ -11,11 +11,11 @@ describe Qup::Session do
   end
 
   it "has a uri" do
-    @session.uri.to_s.must_equal "maildir:#{@path}"
+    @session.uri.to_s.should == "maildir:#{@path}"
   end
 
   it "can create a Queue" do
     q = @session.queue( 'foo' )
-    q.name.must_equal 'foo'
+    q.name.should == 'foo'
   end
 end

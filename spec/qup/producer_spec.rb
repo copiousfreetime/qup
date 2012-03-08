@@ -12,8 +12,8 @@ describe Qup::Producer do
 
   it "produces items onto the queue" do
     p = @queue.producer
-    @queue.depth.must_equal 0
+    @queue.depth.should eq 0
     p.produce( 'production' )
-    @queue.depth.must_equal 1
+    @queue.depth.should eq 1
   end
 end

@@ -6,10 +6,10 @@ describe Qup::Message do
   end
 
   it "has a key" do
-    @m.key.must_equal 'my unique key' 
+    @m.key.should == 'my unique key' 
   end
 
   it 'has data' do
-    @m.data.must_equal 'some data'
+    @m.data.should == 'some data'
   end
 end

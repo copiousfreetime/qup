@@ -22,9 +22,11 @@ Hoe.spec 'qup' do
 
   self.extra_rdoc_files = [ self.readme_file, self.history_file ]
 
-  # test with minitest
-  self.extra_dev_deps << [ 'minitest', '~> 2.11.3']
-  self.testlib = :minitest
+  # test with rspec
+  self.extra_dev_deps << [ 'rspec', '~> 2.8.0']
+  self.testlib = :rspec
+  self.rspec_options = %w[ --color --format doc ]
+  self.test_globs = 'spec/**/*_spec.rb'
 
 end
 
