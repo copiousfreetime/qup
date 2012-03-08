@@ -14,6 +14,7 @@ module Qup
   # At the moment, a Session is not considered threadsafe, so each Thread should
   # create its own Session.
   class Session
+    class ClosedError < Qup::Error; end
 
     # Public: The URI of this Session
     attr_reader :uri
@@ -31,6 +32,8 @@ module Qup
       FileUtils.mkdir_p( @root_path )
       @queues  = Hash.new
       @topics  = Hash.new
+
+      @closed  = false
     end
 
     # Public: Allocate a new Queue
@@ -46,7 +49,10 @@ module Qup
     #
     # Returns a new Queue instance
     def queue( name, options = {}, &block )
-      @queues[name] ||= Queue.new( @root_path , name )
+      raise Qup::Session::ClosedError, "Session connected to #{@uri} is closed" if closed?
+      q = (@queues[name] ||= Queue.new( @root_path , name ))
+      return q unless block_given?
+      yield q
     end
 
     # Public: Allocate a new Topic
@@ -62,7 +68,10 @@ module Qup
     #
     # Returns a new Topic instance
     def topic( name, options = {}, &block )
-      @topics[name] ||= Topic.new( @root_path, name )
+      raise Qup::Session::ClosedError, "Session connected to #{@uri} is closed" if closed?
+      t = (@topics[name] ||= Topic.new( @root_path, name ) )
+      return t unless block_given?
+      yield t
     end
 
     # Public: Close the Session
@@ -71,12 +80,14 @@ module Qup
     #
     # Returns nothing
     def close
+      @closed = true
     end
 
     # Public: Is the Session closed?
     #
     # Returns true if the session is closed, false otherwise.
     def closed?
+      @closed
     end
   end
 end
