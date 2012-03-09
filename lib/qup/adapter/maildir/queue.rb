@@ -12,7 +12,7 @@ class Qup::Adapter::Maildir
 
     # Internal: Create a new Queue
     #
-    # root_path - the Session this Queue is attached to
+    # root_path - the root_path for this Queue to create under
     # name      - the String name of the Queue
     #
     # Returns a new Queue.
