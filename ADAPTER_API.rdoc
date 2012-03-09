@@ -1,0 +1,52 @@
+= Adding an Adapter
+
+Adding an Adapter to qup should take the implementation of 3 classes
+
+* Adapter
+* Queue
+* Topic
+
+== Adapter
+
+The Adapter class to add is how the Adapter gets loaded and is the entry point
+that qup will use to use the backend.
+
+The Adapter API is layed out in Qup::Adapter.
+
+The Adapter class you implement must have Adapter as its parent class so that
+you can call the 'register' class method to register your adapter.
+
+The other instance methods to implement are:
+
+* queue   - Create an object that implements the QueueAPI
+* topic   - Create an object that implements the TopicAPI
+* close   - close the Adapter for futher use
+* closed? - is the Adapter closed
+
+== Adapter::Queue
+
+The Queue class is a point-to-point Messaging implementation, typically used for
+worker queues. You should 'include Qup:QueueAPI'. These are the methods that are
+defined for Queue objects.
+
+* name        - The String Name of the Queue
+* depth       - How many Messages are currently on the Queue
+* flush       - Remove all Messages from the Queue
+* destroy     - Remove the Queue from the System if possible
+* produce     - Put a message onto the Queue
+* consume     - Take a message off of the Queue
+* acknowledge - Tell the System that you have completed processing a Message
+
+== Adapter::Topic
+
+The Topic class is a fanout or pub/sub Messaging implementation, typically
+used to alert or send the same message from one publisher to many subscribers.
+This API is defined in Qup::TopicAPI and all these methods must be implemented.
+
+* name             - The String Name of the Topic
+* destroy          - Remove the Topic from the System if possible
+* subscriber_count - The number of Subscribers on the Topic
+* publish          - Send a Message to all the Subscribers
+* subscriber       - Create a new Subscriber to the Topic
+* publisher        - Create a new Publisher to the Topic
+
