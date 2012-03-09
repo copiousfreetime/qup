@@ -7,6 +7,17 @@ class Qup::Adapter::Kestrel
   class Queue < Destination
     include Qup::QueueAPI
 
+    # Public: Create a new Queue
+    #
+    # address - the Connection Adddress string for the Kestrel Client
+    # name    - the String name of the Topic
+    #
+    # Returns a new Queue
+    def initialize( address, name )
+      super(address, name)
+      @open_messages = {}
+    end
+
     # Public: The name of the Queue
     attr_reader :name
 
@@ -22,7 +33,8 @@ class Qup::Adapter::Kestrel
     #
     # Returns an integer of the Queue depth
     def depth
-      @admin_client.stat(@name)['items']
+      stats = @admin_client.stat( @name )
+      return stats['items']
     end
 
 
@@ -54,6 +66,7 @@ class Qup::Adapter::Kestrel
     def consume(&block)
       data = @client.get( @name )
       q_message = ::Qup::Message.new( data.object_id, data )
+      @open_messages[q_message.key] = q_message
       if block_given? then
         yield_message( q_message, &block )
       else
@@ -70,6 +83,8 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing
     def acknowledge( message )
+      open_msg = @open_messages.delete( message.key )
+      raise Qup::Error, "Message #{message.key} is not currently being consumed" unless open_msg
       @client.close_last_transaction
     end
 

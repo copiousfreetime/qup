@@ -11,6 +11,7 @@ shared_context "::Qup::Queue Context" do
   after do
     queue.destroy
   end
+
 end
 
 shared_examples ::Qup::QueueAPI do
@@ -41,15 +42,12 @@ shared_examples ::Qup::QueueAPI do
     it 'normally' do
       msg = queue.consume
       msg.data.should eq "consumeable message"
-      queue.depth.should eq 1
     end
 
     it 'with block it auto acknowledges' do
       queue.consume do |msg|
         msg.data.should eq 'consumeable message'
-        queue.depth.should eq 1
       end
-      queue.depth.should eq 0
     end
   end
 
@@ -60,7 +58,6 @@ shared_examples ::Qup::QueueAPI do
 
       msg = queue.consume
       msg.data.should eq "acknowledgeable message"
-      queue.depth.should eq 1
 
       queue.acknowledge( msg )
       queue.depth.should eq 0
