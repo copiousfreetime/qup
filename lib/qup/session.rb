@@ -24,6 +24,24 @@ module Qup
     # uri     - The connection String used to connectot to appropriate provider
     # options - The Hash of options that are passed to the underyling Adapter
     #
+    # Yields the created Session
+    #
+    # If a session is yielded, it is closed at the end of the block
+    #
+    # Returns a new Session
+    def self.open( uri, options = {}, &block )
+      session = ::Qup::Session.new( uri, options )
+      return session unless block_given?
+      yield session
+    ensure
+      session.close if block_given?
+    end
+
+    # Public: Create a new Session
+    #
+    # uri     - The connection String used to connectot to appropriate provider
+    # options - The Hash of options that are passed to the underyling Adapter
+    #
     # Returns a new Session
     def initialize( uri, options = {} )
       @uri       = URI.parse( uri )
