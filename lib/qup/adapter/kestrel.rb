@@ -14,7 +14,7 @@ class Qup::Adapter
     # uri - the URI instance for this adapter to use
     def initialize( uri, options = {} )
       @uri        = uri
-      @connection = nil
+      @addr       = "#{@uri.host}:#{@uri.port}"
       @options    = options
       @closed     = false
     end
@@ -25,7 +25,7 @@ class Qup::Adapter
     #
     # Returns a Qup::Queue
     def queue( name )
-      #Qup::Adapter::Kestrel::Queue.new( @connection, name )
+      Qup::Adapter::Kestrel::Queue.new( @addr, name )
     end
 
     # Internal: Create a new Topic from this Adapter
@@ -34,7 +34,7 @@ class Qup::Adapter
     #
     # Returns a Qup::Topic
     def topic( name )
-      #Qup::Adapter::Kestrel::Topic.new( @connection, name )
+      Qup::Adapter::Kestrel::Topic.new( @addr, name )
     end
 
     # Internal: Close the Maildir adapter
@@ -52,3 +52,5 @@ class Qup::Adapter
     end
   end
 end
+require 'qup/adapter/kestrel/queue'
+require 'qup/adapter/kestrel/topic'
