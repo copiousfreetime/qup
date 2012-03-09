@@ -7,7 +7,7 @@ class Qup::Adapter::Kestrel
     # Public: the name of the Queue or Topic
     attr_reader :name
 
-    # Public: Create a new Topic
+    # Public: Create a new Topic or Queue
     #
     # address - the Connection Adddress string for the Kestrel Client
     # name    - the String name of the Topic

@@ -20,7 +20,7 @@ Hoe.spec 'qup' do
   self.history_file = 'HISTORY.rdoc'
   self.readme_file  = 'README.rdoc'
 
-  self.extra_rdoc_files = [ self.readme_file, self.history_file ]
+  self.extra_rdoc_files = [ self.readme_file, self.history_file, 'ADAPTER_API.rdoc' ]
   self.extra_deps << [ 'maildir', '~> 2.0.0' ]
 
   # test with rspec

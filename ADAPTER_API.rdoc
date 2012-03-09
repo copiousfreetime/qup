@@ -1,52 +1,96 @@
 = Adding an Adapter
 
-Adding an Adapter to qup should take the implementation of 3 classes
+Adding an Adapter to Qup should take the implementation of 3 classes
 
-* Adapter
-* Queue
-* Topic
+* Adapter - Inherit from Qup::Adapter
+* Queue - Implement Qup::QueueAPI
+* Topic - Implement Qup::TopicAPI
+
+The rest of the system uses the defined interfaces in the above 3
+Classes/Modules to implement the rest of the beheavior.
+
+Qup ships with 2 adapters already and you should use those as a guideline for
+implementing your own Adapter. Feel free to {open an
+issue on Github}[https://github.com/copiousfreetime/qup/issues] with me to
+create a new adaptor, or send me a pull request.
 
 == Adapter
 
-The Adapter class to add is how the Adapter gets loaded and is the entry point
-that qup will use to use the backend.
+The Qup::Adapter class to add is how the Adapter gets loaded and is the entry point
+that Qup will use to use the backend.
 
-The Adapter API is layed out in Qup::Adapter.
+The Adapter API is laid out in Qup::Adapter.
 
-The Adapter class you implement must have Adapter as its parent class so that
-you can call the 'register' class method to register your adapter.
+The Adapter class you implement must have Qup::Adapter as its parent class so that
+you can call the 'register' class method to register your adapter. Your adapter
+will be invoked when a URI with a scheme equivalent to your registration key is
+used.
 
-The other instance methods to implement are:
+The other instance methods are an Internal API that the Qup::Session object will
+use to interface with your Adapter. These methods should not be used by an end
+user of the library, they are solely for use by the Qup library.
 
-* queue   - Create an object that implements the QueueAPI
-* topic   - Create an object that implements the TopicAPI
-* close   - close the Adapter for futher use
-* closed? - is the Adapter closed
+* Qup::Adapter#close  - close the Adapter for further use
+* Qup::Adapter#closed? - is the Adapter closed
+* Qup::Adapter#queue   - create an object that implements the QueueAPI
+* Qup::Adapter#topic   - create an object that implements the TopicAPI
 
-== Adapter::Queue
+See Qup::Adapter::Maildir or Qup::Adapter::Kestrel
+
+=== Example
+
+  class Qup::Adapter::MyBackend < Qup::Adapter
+    register :mybackend
+  end
+
+  session = Qup::Session.new( 'mybackend://...' )
+
+
+== Qup::Adapter::MyBackend::Queue
 
 The Queue class is a point-to-point Messaging implementation, typically used for
-worker queues. You should 'include Qup:QueueAPI'. These are the methods that are
+worker queues. You should create a 'Qup::Adapter::MyBackend'include Qup:QueueAPI'. These are the methods that are
 defined for Queue objects.
 
-* name        - The String Name of the Queue
-* depth       - How many Messages are currently on the Queue
-* flush       - Remove all Messages from the Queue
-* destroy     - Remove the Queue from the System if possible
-* produce     - Put a message onto the Queue
-* consume     - Take a message off of the Queue
-* acknowledge - Tell the System that you have completed processing a Message
+When Qup::Adapter::MyBackend#queue is invoked, it should return an instance of
+the object that implements Qup::QueueAPI.
 
-== Adapter::Topic
+See Qup::Adapter::Maildir::Queue or Qup::Adapter::Kestrel::Queue
+
+=== Public API used by end users of the system
+
+* Qup::QueueAPI#depth       - How many Messages are currently on the Queue
+* Qup::QueueAPI#destroy     - Remove the Queue from the System if possible
+* Qup::QueueAPI#flush       - Remove all Messages from the Queue
+* Qup::QueueAPI#name        - The String Name of the Queue
+
+=== Internal API used by the Qup library to implement the higher level patterns
+
+* Qup::QueueAPI#acknowledge - Tell the System that you have completed processing a Message
+* Qup::QueueAPI#consume     - Take a message off of the Queue
+* Qup::QueueAPI#produce     - Put a message onto the Queue
+
+
+== Qup::Adapter::MyBackend::Topic
 
 The Topic class is a fanout or pub/sub Messaging implementation, typically
 used to alert or send the same message from one publisher to many subscribers.
 This API is defined in Qup::TopicAPI and all these methods must be implemented.
 
-* name             - The String Name of the Topic
-* destroy          - Remove the Topic from the System if possible
-* subscriber_count - The number of Subscribers on the Topic
-* publish          - Send a Message to all the Subscribers
-* subscriber       - Create a new Subscriber to the Topic
-* publisher        - Create a new Publisher to the Topic
+When Qup::Adapter::MyBackend#topic is invoked, it should return an instance of
+the object that implements Qup::TopicAPI.
+
+See Qup::Adapter::Maildir::Topic or Qup::Adapter::Kestrel::Topic
+
+=== Public API used by end users of the system
+
+* Qup::TopicAPI#destroy          - Remove the Topic from the System if possible
+* Qup::TopicAPI#name             - The String Name of the Topic
+* Qup::TopicAPI#publisher        - Create a new Publisher to the Topic
+* Qup::TopicAPI#subscriber       - Create a new Subscriber to the Topic
+* Qup::TopicAPI#subscriber_count - The number of Subscribers on the Topic
+
+=== Internal API used by the Qup library to implement the higher level patterns
+
+* Qup::TopicAPI#publish          - Send a Message to all the Subscribers
 
