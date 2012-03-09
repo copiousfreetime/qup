@@ -14,7 +14,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing.
     def flush
-      @client.flush(@name)
+      @admin_client.flush(@name)
     end
 
 
@@ -22,7 +22,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns an integer of the Queue depth
     def depth
-      @client.stat(@name)['items']
+      @admin_client.stat(@name)['items']
     end
 
 

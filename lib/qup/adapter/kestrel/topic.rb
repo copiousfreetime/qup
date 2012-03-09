@@ -27,15 +27,15 @@ class Qup::Adapter::Kestrel
     #
     # Returns a Subscriber
     def subscriber( name )
-      ::Qup::Subscriber.new( self, subscriber_queue( name )  )
+      ::Qup::Subscriber.new( self, subscriber_queue( name ) )
     end
+
 
     # Public: Return the number of Subscribers to this Topic
     #
     # Returns integer
     def subscriber_count
       c = 0
-      puts @client.stats.inspect
       @client.stats['queues'].keys.each do |k|
         next if k =~ /errors$/
         c += 1 if k =~ /^#{@name}\+/
@@ -55,14 +55,14 @@ class Qup::Adapter::Kestrel
     #######
     private
     #######
-    #
-    def subscriber_queue_name( sub_name )
-      "#{@name}+#{sub_name}"
-    end
 
     def subscriber_queue( sub_name )
       sname = subscriber_queue_name( sub_name )
       ::Qup::Adapter::Kestrel::Queue.new( @address, sname )
+    end
+
+    def subscriber_queue_name( sub_name )
+      "#{@name}+#{sub_name}"
     end
   end
 end

@@ -14,8 +14,11 @@ class Qup::Adapter::Kestrel
     #
     # Returns a new Topic.
     def initialize( address, name )
-      @client = blocking_transactional_client( address )
-      @name   = name
+      @address      = address
+      @client       = blocking_transactional_client( @address )
+      @admin_client = regular_client( @address )
+      @name         = name
+      ping
     end
 
     # Public: Destroy the Topic
@@ -24,7 +27,13 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing.
     def destroy
-      @client.delete( @name )
+      @admin_client.delete( name )
+      @admin_client.delete( name+"_errors" )
+    end
+
+    def ping
+      @admin_client.peek( name )
+      return true
     end
 
     #######
