@@ -18,6 +18,12 @@ module Qup
   def self.open( uri, &block )
     Qup::Session.open( uri, &block )
   end
+
+  KNOWN_ADAPTERS = {
+    # require => gem
+    'maildir' => 'maildir',
+    'kestrel' => 'kestrel-client'
+  }
 end
 
 require 'qup/adapter'
@@ -30,4 +36,11 @@ require 'qup/session'
 require 'qup/subscriber'
 require 'qup/topic_api'
 
-require 'qup/adapter/maildir'
+# Load the known adapters, print a warning if $VERBOSE is set
+Qup::KNOWN_ADAPTERS.each do |adapter, gemname|
+  begin
+    require "qup/adapter/#{adapter}"
+  rescue LoadError
+    warn "Install the '#{gemname}' gem of you want to use the #{adapter} adapter" if $VERBOSE
+  end
+end
