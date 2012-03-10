@@ -1,11 +1,8 @@
 require 'spec_helper'
 require 'qup/shared_adapter_examples'
+require 'qup/adapter/kestrel_context'
 
-describe Qup::Adapter::Kestrel do
-  let( :uri     ) { URI.parse( "kestrel://localhost:22122/" )   }
-
-  # Needed to support the Shared Examples
-  let( :adapter ) { ::Qup::Adapter::Kestrel.new( uri ) }
-
-  it_behaves_like ::Qup::Adapter
+describe 'Qup::Adapter::Kestrel', :kestrel => true do
+  include_context "Qup::Adapter::Kestrel"
+  it_behaves_like Qup::Adapter
 end
