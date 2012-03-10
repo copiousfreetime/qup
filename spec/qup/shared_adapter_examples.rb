@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-# The Adapter share contxt requires that the context is include in define:
+# The Adapter share context requires that the context is include in define:
 #
 #   let( :adapter )
 #
-shared_examples ::Qup::Adapter do
+shared_examples Qup::Adapter do
   it 'is registered as an adapter' do
     Qup::Adapters[uri.scheme].should eq adapter.class
   end

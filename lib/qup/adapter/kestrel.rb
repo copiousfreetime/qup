@@ -1,22 +1,22 @@
 require 'qup/adapter'
-require 'maildir'
+require 'kestrel-client'
 
 class Qup::Adapter
-  # Internal: The backing adapter for Qup that uses Maildir as the messaging
+  # Internal: The backing adapter for Qup that uses Kestrel as the messaging
   # infrastructure
-  class Maildir < ::Qup::Adapter
+  class Kestrel < ::Qup::Adapter
 
-    # Register this adapter as :maildir
-    register :maildir
+    # Register this adapter as :kestrel
+    register :kestrel
 
-    # Internal: Create a new Maildir Adapter
+    # Internal: Create a new Kestrel Adapter
     #
     # uri - the URI instance for this adapter to use
     def initialize( uri, options = {} )
-      @uri       = uri
-      @options   = options
-      @root_path = uri.path
-      @closed    = false
+      @uri        = uri
+      @addr       = "#{@uri.host}:#{@uri.port}"
+      @options    = options
+      @closed     = false
     end
 
     # Internal: Create a new Queue from this Adapter
@@ -25,7 +25,7 @@ class Qup::Adapter
     #
     # Returns a Qup::Queue
     def queue( name )
-      Qup::Adapter::Maildir::Queue.new( @root_path, name )
+      Qup::Adapter::Kestrel::Queue.new( @addr, name )
     end
 
     # Internal: Create a new Topic from this Adapter
@@ -34,17 +34,17 @@ class Qup::Adapter
     #
     # Returns a Qup::Topic
     def topic( name )
-      Qup::Adapter::Maildir::Topic.new( @root_path, name )
+      Qup::Adapter::Kestrel::Topic.new( @addr, name )
     end
 
-    # Internal: Close the Maildir adapter
+    # Internal: Close the Kestrel adapter
     #
     # Return nothing
     def close
       @closed = true
     end
 
-    # Internal: Is the Maildir Adapter closed
+    # Internal: Is the Kestrel Adapter closed
     #
     # Returns true or false
     def closed?
@@ -52,6 +52,5 @@ class Qup::Adapter
     end
   end
 end
-
-require 'qup/adapter/maildir/queue'
-require 'qup/adapter/maildir/topic'
+require 'qup/adapter/kestrel/queue'
+require 'qup/adapter/kestrel/topic'

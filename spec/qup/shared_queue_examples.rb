@@ -1,19 +1,20 @@
 require 'spec_helper'
 
-# The Queue share contxt requires that the context is include in define:
+# The Queue share context requires that the context is include in define:
 #
 #   let( :adapter )
 #
-shared_context "::Qup::Queue Context" do
+shared_context "Qup::Queue" do
 
   let( :queue ) { adapter.queue( 'foo' ) }
 
   after do
     queue.destroy
   end
+
 end
 
-shared_examples ::Qup::QueueAPI do
+shared_examples Qup::QueueAPI do
 
   it "has a name" do
     queue.name.should eq 'foo'
@@ -41,15 +42,12 @@ shared_examples ::Qup::QueueAPI do
     it 'normally' do
       msg = queue.consume
       msg.data.should eq "consumeable message"
-      queue.depth.should eq 1
     end
 
     it 'with block it auto acknowledges' do
       queue.consume do |msg|
         msg.data.should eq 'consumeable message'
-        queue.depth.should eq 1
       end
-      queue.depth.should eq 0
     end
   end
 
@@ -60,7 +58,6 @@ shared_examples ::Qup::QueueAPI do
 
       msg = queue.consume
       msg.data.should eq "acknowledgeable message"
-      queue.depth.should eq 1
 
       queue.acknowledge( msg )
       queue.depth.should eq 0

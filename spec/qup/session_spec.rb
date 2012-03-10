@@ -2,8 +2,9 @@ require 'spec_helper'
 
 describe Qup::Session do
 
-  let( :path    ) { temp_dir( "qup-session" )                }
-  let( :session ) { ::Qup::Session.new( "maildir://#{path}") }
+  let( :path    ) { temp_dir( "qup-session" ) }
+  let( :uri     ) { "maildir://#{path}"       }
+  let( :session ) { ::Qup::Session.new( uri ) }
 
   after do
     FileUtils.rm_rf( path )
@@ -17,6 +18,28 @@ describe Qup::Session do
     session.closed?.should be_false
     session.close
     session.closed?.should be_true
+  end
+
+  describe '#open' do
+    it 'returns a new session' do
+      s = Qup::Session.open( uri )
+      s.closed?.should be_false
+    end
+
+    it 'yields a new session' do
+      Qup::Session.open( uri ) do |s|
+        s.closed?.should be_false
+      end
+    end
+
+    it 'closes a session at the end of the block' do
+      save_s = nil
+      Qup::Session.open( uri ) do |s|
+        s.closed?.should be_false
+        save_s = s
+      end
+      save_s.closed?.should be_true
+    end
   end
 
   describe '#queue' do

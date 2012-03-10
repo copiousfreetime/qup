@@ -1,9 +1,9 @@
 module Qup
   # Public: A Message is an item that may be put on and taken off the queue.
-  # 
+  #
   class Message
 
-    # Public: The unique identifier of this messgae
+    # Public: The unique identifier of this message
     attr_reader :key
 
     # Public: The data in this Message

@@ -1,14 +1,13 @@
 require 'spec_helper'
 
-# The Queue share contxt requires that the context is include in define:
+# The Queue share context requires that the context is include in define:
 #
 #   let( :adapter )
 #
-shared_context "::Qup::Topic Context" do
-  let( :adapter ) { ::Qup::Adapter::Maildir.new( uri ) }
+shared_context "Qup::Topic" do
 
   before do
-    @topic = adapter.topic( 't' )
+    @topic = adapter.topic( 'topic' )
   end
 
   after do
@@ -17,20 +16,10 @@ shared_context "::Qup::Topic Context" do
 end
 
 
-shared_examples ::Qup::TopicAPI do
+shared_examples Qup::TopicAPI do
 
   it "has a name" do
-    @topic.name.should == 't'
-  end
-
-  it "creates the base directory if it doesn't exist" do
-    File.directory?( File.join( path, 't' )).should be_true
-  end
-
-  it "creates subscribers" do
-    @topic.subscriber_count.should eq 0
-    3.times { |x| @topic.subscriber( x.to_s ) }
-    @topic.subscriber_count.should eq 3
+    @topic.name.should == 'topic'
   end
 
   it "creates publisher" do
@@ -38,16 +27,31 @@ shared_examples ::Qup::TopicAPI do
     p.topic.should eq @topic
   end
 
-  it "sends a copy of the message to every subscriber" do
-    s1 = @topic.subscriber( 's1' )
-    s2 = @topic.subscriber( 's2' )
-    p  = @topic.publisher
 
-    p.publish( "hi all" )
-    m1 = s1.consume
-    m1.data.should eq "hi all"
+  describe "subscribers" do
+    before do
+      @subs = []
+      3.times do |x|
+        @subs << @topic.subscriber( "sub-#{x}")
+      end
+    end
 
-    m2 = s2.consume
-    m2.data.should eq "hi all"
+    after do
+      @subs.each{ |s| "unsubscribing #{s.name}"; s.unsubscribe }
+    end
+
+    it "are counted" do
+      @topic.subscriber_count.should eq 3
+    end
+
+    it "each receives a copy of the message" do
+      p = @topic.publisher
+      p.publish( "hi all" )
+
+      @subs.each do |sub|
+        msg = sub.consume
+        msg.data.should eq 'hi all'
+      end
+    end
   end
 end

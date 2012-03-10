@@ -52,8 +52,10 @@ module Qup
 
     # Public: the name of the Topic
     #
-    # Returs the String name
+    # Returns the String name
     def name
+      super
+    rescue NoMethodError
       raise NotImplementedError, "please implement 'name'"
     end
 
@@ -64,6 +66,8 @@ module Qup
     #
     # Returns nothing.
     def destroy
+      super
+    rescue NoMethodError
       raise NotImplementedError, "please implement 'destroy'"
     end
 
@@ -84,6 +88,5 @@ module Qup
     def publish( message )
       raise NotImplementedError, "please implement 'publish'"
     end
-
   end
 end
