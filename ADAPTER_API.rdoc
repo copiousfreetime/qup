@@ -16,7 +16,7 @@ create a new adaptor, or send me a pull request.
 
 == Adapter
 
-The Qup::Adapter class to add is how the Adapter gets loaded and is the entry point
+The Qup::Adapter class is how the Adapter gets loaded and is the entry point
 that Qup will use to use the backend.
 
 The Adapter API is laid out in Qup::Adapter.
