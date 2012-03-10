@@ -4,7 +4,7 @@ require 'spec_helper'
 #
 #   let( :adapter )
 #
-shared_context "::Qup::Queue Context" do
+shared_context "Qup::Queue" do
 
   let( :queue ) { adapter.queue( 'foo' ) }
 
@@ -14,7 +14,7 @@ shared_context "::Qup::Queue Context" do
 
 end
 
-shared_examples ::Qup::QueueAPI do
+shared_examples Qup::QueueAPI do
 
   it "has a name" do
     queue.name.should eq 'foo'

@@ -4,7 +4,7 @@ require 'spec_helper'
 #
 #   let( :adapter )
 #
-shared_context "::Qup::Topic Context" do
+shared_context "Qup::Topic" do
 
   before do
     @topic = adapter.topic( 'topic' )
@@ -16,7 +16,7 @@ shared_context "::Qup::Topic Context" do
 end
 
 
-shared_examples ::Qup::TopicAPI do
+shared_examples Qup::TopicAPI do
 
   it "has a name" do
     @topic.name.should == 'topic'
