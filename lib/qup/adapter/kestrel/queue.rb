@@ -9,7 +9,7 @@ class Qup::Adapter::Kestrel
 
     # Public: Create a new Queue
     #
-    # address - the Connection Adddress string for the Kestrel Client
+    # address - the Connection Address string for the Kestrel Client
     # name    - the String name of the Topic
     #
     # Returns a new Queue
@@ -78,7 +78,7 @@ class Qup::Adapter::Kestrel
     # Internal: Acknowledge that message is completed and remove it from the
     # Queue.
     #
-    # For Kestrel, this really just close the lastmessage, the message that is
+    # For Kestrel, this really just closes the last message, the message that is
     # sent in does not matter.
     #
     # Returns nothing

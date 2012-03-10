@@ -11,7 +11,7 @@ module Qup
   # Producer putting job Messages on the Queue and a collection of Consumers
   # which work on those job Messages.
   #
-  # This is the API that MUST be impelemnted in the adapter.
+  # This is the API that MUST be implemented in the adapter.
   #
   # Example:
   #
@@ -45,7 +45,7 @@ module Qup
 
     # Public: the name of the Queue
     #
-    # Returs the String name
+    # Returns the String name
     def name
       super
     rescue NoMethodError

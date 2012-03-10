@@ -2,14 +2,14 @@ require 'qup/adapter'
 require 'kestrel-client'
 
 class Qup::Adapter
-  # Internal: The backing adapter for Qup that uses Maildir as a the messaging
+  # Internal: The backing adapter for Qup that uses Kestrel as the messaging
   # infrastructure
   class Kestrel < ::Qup::Adapter
 
-    # Register this adapter as :maildir
+    # Register this adapter as :kestrel
     register :kestrel
 
-    # Internal: Create a new Maildir Adapter
+    # Internal: Create a new Kestrel Adapter
     #
     # uri - the URI instance for this adapter to use
     def initialize( uri, options = {} )
@@ -37,14 +37,14 @@ class Qup::Adapter
       Qup::Adapter::Kestrel::Topic.new( @addr, name )
     end
 
-    # Internal: Close the Maildir adapter
+    # Internal: Close the Kestrel adapter
     #
     # Return nothing
     def close
       @closed = true
     end
 
-    # Internal: Is the Maildir Adapter closed
+    # Internal: Is the Kestrel Adapter closed
     #
     # Returns true or false
     def closed?

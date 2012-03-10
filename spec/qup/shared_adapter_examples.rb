@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-# The Adapter share contxt requires that the context is include in define:
+# The Adapter share context requires that the context is include in define:
 #
 #   let( :adapter )
 #

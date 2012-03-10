@@ -22,7 +22,7 @@ module Qup
     # Message will be auto-acknowledged. If you do not consume messages with a
     # block, then you are required to acknowledge the messages on your own.
     #
-    # Returns a Messaage
+    # Returns a Message
     def consume(&block)
       @queue.consume(&block)
     end

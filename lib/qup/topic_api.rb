@@ -52,7 +52,7 @@ module Qup
 
     # Public: the name of the Topic
     #
-    # Returs the String name
+    # Returns the String name
     def name
       super
     rescue NoMethodError

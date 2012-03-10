@@ -9,7 +9,7 @@ class Qup::Adapter::Kestrel
 
     # Public: Create a new Topic or Queue
     #
-    # address - the Connection Adddress string for the Kestrel Client
+    # address - the Connection Address string for the Kestrel Client
     # name    - the String name of the Topic
     #
     # Returns a new Topic.

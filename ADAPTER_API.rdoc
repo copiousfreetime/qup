@@ -7,7 +7,7 @@ Adding an Adapter to Qup should take the implementation of 3 classes
 * Topic - Implement Qup::TopicAPI
 
 The rest of the system uses the defined interfaces in the above 3
-Classes/Modules to implement the rest of the beheavior.
+Classes/Modules to implement the rest of the behavior.
 
 Qup ships with 2 adapters already and you should use those as a guideline for
 implementing your own Adapter. Feel free to {open an
@@ -49,8 +49,9 @@ See Qup::Adapter::Maildir or Qup::Adapter::Kestrel
 == Qup::Adapter::MyBackend::Queue
 
 The Queue class is a point-to-point Messaging implementation, typically used for
-worker queues. You should create a 'Qup::Adapter::MyBackend'include Qup:QueueAPI'. These are the methods that are
-defined for Queue objects.
+worker queues. You should create a 'Qup::Adapter::MyBackend' and have it
+'include Qup:QueueAPI'. These are the methods that are defined for Queue
+objects.
 
 When Qup::Adapter::MyBackend#queue is invoked, it should return an instance of
 the object that implements Qup::QueueAPI.

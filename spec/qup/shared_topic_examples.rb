@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-# The Queue share contxt requires that the context is include in define:
+# The Queue share context requires that the context is include in define:
 #
 #   let( :adapter )
 #

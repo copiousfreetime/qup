@@ -11,7 +11,7 @@ module Qup
   #   session.queue( 'foo' ) # => Queue
   #   session.topic( 'bar' ) # => Topic
   #
-  # At the moment, a Session is not considered threadsafe, so each Thread should
+  # At the moment, a Session is not considered thread safe, so each Thread should
   # create its own Session.
   class Session
     class ClosedError < Qup::Error; end
@@ -21,8 +21,8 @@ module Qup
 
     # Public: Create a new Session
     #
-    # uri     - The connection String used to connectot to appropriate provider
-    # options - The Hash of options that are passed to the underyling Adapter
+    # uri     - The connection String used to connect to appropriate provider
+    # options - The Hash of options that are passed to the underlying Adapter
     #
     # Yields the created Session
     #
@@ -39,8 +39,8 @@ module Qup
 
     # Public: Create a new Session
     #
-    # uri     - The connection String used to connectot to appropriate provider
-    # options - The Hash of options that are passed to the underyling Adapter
+    # uri     - The connection String used to connect to appropriate provider
+    # options - The Hash of options that are passed to the underlying Adapter
     #
     # Returns a new Session
     def initialize( uri, options = {} )
