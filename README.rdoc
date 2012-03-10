@@ -113,6 +113,18 @@ After checking out the source, run:
 This task will install any missing dependencies, run the tests/specs,
 and generate the RDoc.
 
+=== Kestrel
+
+To run the Kestrel tests you will need:
+
+* gem install kestrel-client
+* A Kestrel server running on <tt>localhost:22133</tt>
+
+You can download Kestrel from http://robey.github.com/kestrel/ and then run the
++scripts/devel.sh+ command and you will have a default Kestrel server running on
+<tt>localhost:22133</tt>. This will be enough to run the kestrel tests.
+
+
 == LICENSE:
 
 (The ISC LICENSE)
