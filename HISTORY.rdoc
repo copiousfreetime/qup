@@ -1,6 +1,6 @@
-=== 1.0.0 / 2012-03-04
+=== 1.0.0 / 2012-03-XX
 
 * 1 major enhancement
 
-  * Birthday!
+  * Initial public release
 
