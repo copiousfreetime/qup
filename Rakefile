@@ -177,6 +177,6 @@ BEGIN {
   This.description = desc.join("\n\n")
 
 
-  This.exclude_from_manifest = %r/Manifest.txt|tmp$|\.(git|DS_Store)|doc|coverage|\.gemspec$|\.swp$|\.jar|\.rvmrc$|~$/
+  This.exclude_from_manifest = %r/tmp$|\.(git|DS_Store)|^(doc|coverage)|\.gemspec$|\.swp$|\.jar|\.rvmrc$|~$/
 
 }
