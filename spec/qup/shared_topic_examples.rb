@@ -37,7 +37,7 @@ shared_examples Qup::TopicAPI do
     end
 
     after do
-      @subs.each{ |s| "unsubscribing #{s.name}"; s.unsubscribe }
+      @subs.each { |s| s.unsubscribe }
     end
 
     it "are counted" do
