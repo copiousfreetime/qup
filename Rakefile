@@ -59,7 +59,7 @@ end
 namespace 'manifest' do
   desc "Check the manifest"
   task :check => :clean do
-    files = FileList["**/*"].exclude( This.exclude_from_manifest ).to_a.sort
+    files = FileList["**/*", ".*"].exclude( This.exclude_from_manifest ).to_a.sort
     files = files.select{ |f| File.file?( f ) }
 
     tmp = "Manifest.tmp"
