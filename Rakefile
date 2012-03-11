@@ -137,7 +137,7 @@ This.gemspec = Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(/^bin/) { |f| File.basename(f) }
   spec.test_files  = spec.files.grep(/^spec/)
 
-  spec.extra_rdoc_files << spec.files.grep(/(txt|rdoc)$/)
+  spec.extra_rdoc_files += spec.files.grep(/(txt|rdoc)$/)
   spec.rdoc_options = [ "--main"  , 'README.rdoc',
                         "--markup", "tomdoc" ]
 
@@ -157,14 +157,16 @@ end
 This.gemspec_file = "#{This.name}.gemspec"
 
 desc "Build the #{This.name}.gemspec file"
-task :gemspec => [This.gemspec_file]
-file This.gemspec_file do
-  File.open( This.gemspec_file, "wb+" ) { |f| f.write This.gemspec.to_ruby }
+task :gemspec do
+  File.open( This.gemspec_file, "wb+" ) do |f|
+    f.write This.gemspec.to_ruby
+  end
 end
 CLOBBER << This.gemspec_file
 
 require 'rubygems/package_task'
-Gem::PackageTask.new( This.gemspec ) do |pkg|
+Gem::PackageTask.new( This.gemspec ) do
+  # nothing
 end
 
 #------------------------------------------------------------------------------
@@ -214,5 +216,6 @@ BEGIN {
 
 
   This.exclude_from_manifest = %r/tmp$|\.(git|DS_Store)|^(doc|coverage)|\.gemspec$|\.swp$|\.jar|\.rvmrc$|~$/
+  This.manifest = Util.read_manifest
 
 }
