@@ -2,7 +2,7 @@
 
 * http://github.com/copiousfreetime/qup
 
-== DESCRIPTION:
+== DESCRIPTION
 
 Qup is a generalized API for Message Queue and Publish/Subscribe messaging
 patterns with the ability to plug in an appropriate messaging infrastructure
@@ -14,7 +14,7 @@ Additional Adapters will be developed as needs arise. {Please submit an
 Issue}[https://github.com/copiousfreetime/qup/issues] to have a new Adapter
 created. Pull requests gladly accepted.
 
-== FEATURES:
+== FEATURES
 
 Qup provides an abstract implementation of two common messaging patterns.
 
@@ -50,7 +50,7 @@ acknowledgeable messaging.
   acknowledged. In other words, if the Consumer does not acknowledge the message
   then the messages infrastructure will put the Message back onto the Queue.
 
-== SYNOPSIS:
+== SYNOPSIS
 
 === Basic Message Queue
 
@@ -91,7 +91,7 @@ acknowledgeable messaging.
     end                               # auto acknowledge an end of block
   end
 
-== REQUIREMENTS:
+== REQUIREMENTS
 
 Depending on the backend messaging system you want to use, you'll need to
 install additional gems. At the current moment, these are the supported
@@ -100,11 +100,11 @@ messaging backends.
 * Qup::Adapter::Maildir - built in and uses the 'maildir' gem
 * Qup::Adapter::Kestrel - uses the 'kestrel-client' gem
 
-== INSTALL:
+== INSTALL
 
 * gem install qup
 
-== DEVELOPERS:
+== DEVELOPERS
 
 After checking out the source, run:
 
@@ -125,7 +125,7 @@ You can download Kestrel from http://robey.github.com/kestrel/ and then run the
 <tt>localhost:22133</tt>. This will be enough to run the kestrel tests.
 
 
-== LICENSE:
+== LICENSE
 
 (The ISC LICENSE)
 
