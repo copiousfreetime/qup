@@ -1,6 +1,6 @@
-=== 1.0.0 / 2012-03-XX
+= Changelog
 
-* 1 major enhancement
+== Version 1.0.0 - 2012-03-10
 
-  * Initial public release
+* Initial public release
 
