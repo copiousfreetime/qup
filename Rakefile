@@ -6,17 +6,53 @@ This.email    = "jeremy@copiousfreetime.org"
 This.homepage = "http://github.com/copiousfreetime/#{ This.name }"
 This.version  = Util.version
 
+#------------------------------------------------------------------------------
+# If you want to Develop on qup just run 'rake develop' and you'll have all you
+# need to get going. If you want to use bundler for development, then run
+# 'rake develop:using_bundler'
+#------------------------------------------------------------------------------
+namespace :develop do
+  task :default do
+    require 'rubygems/dependency_installer'
+    installer = Gem::DependencyInstaller.new
+
+    puts "Installing gem depedencies needed for development"
+    This.gemspec.dependencies.each do |dep|
+      if dep.matching_specs.empty? then
+        puts "Installing : #{dep}"
+        installer.install dep
+      else
+        puts "Skipping   : #{dep} -> already installed #{dep.matching_specs.first.full_name}"
+      end
+    end
+    puts "\n\nNow run 'rake test'"
+  end
+
+  file 'Gemfile' => :gemspec do
+    File.open( "Gemfile", "w+" ) do |f|
+      f.puts 'source :rubygems'
+      f.puts 'gemspec'
+    end
+  end
+
+  desc "Create a bundler Gemfile"
+  task :using_bundler => 'Gemfile' do
+    puts "Now you can 'bundle'"
+  end
+end
+desc "Boostrap development"
+task :develop => "develop:default"
 
 #------------------------------------------------------------------------------
 # RSpec
 #------------------------------------------------------------------------------
-task :default => :test
 begin
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new( :test ) do |t|
     t.ruby_opts    = %w[ -w ]
     t.rspec_opts   = %w[ --color --format documentation ]
   end
+  task :default => :test
 rescue LoadError
   Util.task_warning( 'test' )
 end
