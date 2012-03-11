@@ -1,6 +1,7 @@
 module Qup
   # The Current Version of the library
   VERSION = '1.0.0'
+
   class Error < StandardError; end
 
   # Public: Create a new Session using the given provider URI
