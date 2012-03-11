@@ -108,10 +108,15 @@ messaging backends.
 
 After checking out the source, run:
 
-  $ rake newb
+  $ rake develop
 
-This task will install any missing dependencies, run the tests/specs,
-and generate the RDoc.
+This task will install any missing dependencies. You may then run:
+
+  $ rake test
+
+Other tasks are viewable with
+
+  $ rake -T
 
 === Kestrel
 
