@@ -14,6 +14,10 @@ lib/qup/adapter/kestrel/topic.rb
 lib/qup/adapter/maildir.rb
 lib/qup/adapter/maildir/queue.rb
 lib/qup/adapter/maildir/topic.rb
+lib/qup/adapter/redis.rb
+lib/qup/adapter/redis/connection.rb
+lib/qup/adapter/redis/queue.rb
+lib/qup/adapter/redis/topic.rb
 lib/qup/consumer.rb
 lib/qup/message.rb
 lib/qup/producer.rb
@@ -30,6 +34,10 @@ spec/qup/adapter/maildir/queue_spec.rb
 spec/qup/adapter/maildir/topic_spec.rb
 spec/qup/adapter/maildir_context.rb
 spec/qup/adapter/maildir_spec.rb
+spec/qup/adapter/redis/queue_spec.rb
+spec/qup/adapter/redis/topic_spec.rb
+spec/qup/adapter/redis_context.rb
+spec/qup/adapter/redis_spec.rb
 spec/qup/adapter_spec.rb
 spec/qup/consumer_spec.rb
 spec/qup/message_spec.rb
