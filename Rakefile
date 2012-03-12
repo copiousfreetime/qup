@@ -109,6 +109,7 @@ namespace 'manifest' do
     ensure
       rm tmp
     end
+    puts "Manifest looks good"
   end
 
   desc "Generate the manifest"
@@ -170,6 +171,27 @@ CLOBBER << This.gemspec_file
 require 'rubygems/package_task'
 Gem::PackageTask.new( This.gemspec ) do
   # nothing
+end
+
+#------------------------------------------------------------------------------
+# Release
+#------------------------------------------------------------------------------
+task :release_check do
+  unless `git branch` =~ /^\* master$/
+    abort "You must be on the master branch to release!"
+  end
+  unless `git status` =~ /^nothing to commit$/
+    abort "Nope, sorry, you have unfinished business"
+  end
+end
+
+desc "Create tag v#{This.version}, build and push #{This.gemspec.full_name} to rubygems.org"
+task :release => [ :release_check, 'manifest:check', :gem ] do
+  sh "git commit --allow-empty -a -m 'Release #{This.version}'"
+  sh "git tag -a -m 'v#{This.version}' v#{This.version}"
+  sh "git push origin master"
+  sh "git push origin v#{This.version}"
+  sh "gem push pkg/#{This.gemspec.full_name}.gem"
 end
 
 #------------------------------------------------------------------------------
