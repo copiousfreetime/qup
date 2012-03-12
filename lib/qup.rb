@@ -23,7 +23,8 @@ module Qup
   KNOWN_ADAPTERS = {
     # require => gem
     'maildir' => 'maildir',
-    'kestrel' => 'kestrel-client'
+    'kestrel' => 'kestrel-client',
+    'redis'   => 'redis'
   }
 end
 
