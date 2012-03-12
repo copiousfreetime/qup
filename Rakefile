@@ -180,7 +180,7 @@ task :release_check do
   unless `git branch` =~ /^\* master$/
     abort "You must be on the master branch to release!"
   end
-  unless `git status` =~ /^nothing to commit$/
+  unless `git status` =~ /^nothing to commit/m
     abort "Nope, sorry, you have unfinished business"
   end
 end
