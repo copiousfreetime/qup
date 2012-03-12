@@ -39,6 +39,7 @@ namespace :develop do
   task :using_bundler => 'Gemfile' do
     puts "Now you can 'bundle'"
   end
+  CLOBBER << FileList['Gemfile*']
 end
 desc "Boostrap development"
 task :develop => "develop:default"
@@ -217,7 +218,7 @@ BEGIN {
   This.description = desc.join("\n\n")
 
 
-  This.exclude_from_manifest = %r/tmp$|\.(git|DS_Store)|^(doc|coverage)|\.gemspec$|\.swp$|\.jar|\.rvmrc$|~$/
+  This.exclude_from_manifest = %r/tmp$|\.(git|DS_Store)|^(doc|coverage|pkg)|\.gemspec$|\.swp$|\.jar|\.rvmrc$|~$/
   This.manifest = Util.read_manifest
 
 }
