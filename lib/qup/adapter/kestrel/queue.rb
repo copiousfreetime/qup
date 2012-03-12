@@ -2,12 +2,12 @@ require 'qup/adapter/kestrel/destination'
 
 class Qup::Adapter::Kestrel
   #
-  # Internal: The Qup Implementation in the Kestrel Adapter
+  # Internal: The Implementation of Queue in the Kestrel Adapter
   #
   class Queue < Destination
     include Qup::QueueAPI
 
-    # Public: Create a new Queue
+    # Internal: Create a new Queue
     #
     # address - the Connection Address string for the Kestrel Client
     # name    - the String name of the Topic
@@ -18,7 +18,7 @@ class Qup::Adapter::Kestrel
       @open_messages = {}
     end
 
-    # Public: The name of the Queue
+    # Internal: The name of the Queue
     attr_reader :name
 
     # Internal: Remove all messages from the Queue

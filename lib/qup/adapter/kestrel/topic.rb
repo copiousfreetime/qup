@@ -1,21 +1,21 @@
 require 'qup/adapter/kestrel/destination'
 class Qup::Adapter::Kestrel
   #
-  # Public: A Topic for use in a publish-subscribe Messaging
+  # Internal: The Topic implementation for the Kestrel Adapter
   #
   # The topic delivers each Message that it is give to each and every Subscriber
   #
   class Topic < Destination
     include Qup::TopicAPI
 
-    # Public: Creates a Publisher for the Topic
+    # Internal : Creates a Publisher for the Topic
     #
     # Returns a new Publisher
     def publisher
       ::Qup::Publisher.new( self )
     end
 
-    # Public: Create a subscriber for the Topic
+    # Internal: Create a subscriber for the Topic
     #
     # name - the String name of the subscriber
     #
@@ -31,7 +31,7 @@ class Qup::Adapter::Kestrel
     end
 
 
-    # Public: Return the number of Subscribers to this Topic
+    # Internal: Return the number of Subscribers to this Topic
     #
     # Returns integer
     def subscriber_count

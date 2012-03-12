@@ -1,16 +1,16 @@
 class Qup::Adapter::Maildir
   #
-  # Public: A Topic for use in a publish-subscribe Messaging
+  # Internal: A Topic for use in a publish-subscribe Messaging
   #
   # The topic delivers each Message that it is give to each and every Subscriber
   #
   class Topic
     include Qup::TopicAPI
 
-    # Public: the name of the Topic
+    # Internal: the name of the Topic
     attr_reader :name
 
-    # Public: Create a new Topic
+    # Internal: Create a new Topic
     #
     # root_path - the Session this Topic is attached to
     # name      - the String name of the Topic
@@ -25,7 +25,7 @@ class Qup::Adapter::Maildir
       FileUtils.mkdir_p( @topic_path )
     end
 
-    # Public: Destroy the Topic
+    # Internal: Destroy the Topic
     #
     # If possible remove the existence of the Topic from the System
     #
@@ -34,14 +34,14 @@ class Qup::Adapter::Maildir
       @topic_path.rmtree
     end
 
-    # Public: Creates a Publisher for the Topic
+    # Internal: Creates a Publisher for the Topic
     #
     # Returns a new Publisher
     def publisher
       ::Qup::Publisher.new( self )
     end
 
-    # Public: Create a subscriber for the Topic
+    # Internal: Create a subscriber for the Topic
     #
     # name - the String name of the subscriber
     #
@@ -56,7 +56,7 @@ class Qup::Adapter::Maildir
       ::Qup::Subscriber.new( self, sub_queue( name )  )
     end
 
-    # Public: Return the number of Subscribers to this Topic
+    # Internal: Return the number of Subscribers to this Topic
     #
     # Returns integer
     def subscriber_count

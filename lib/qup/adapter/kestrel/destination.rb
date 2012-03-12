@@ -4,10 +4,10 @@ class Qup::Adapter::Kestrel
   #
   class Destination
 
-    # Public: the name of the Queue or Topic
+    # Internal: the name of the Queue or Topic
     attr_reader :name
 
-    # Public: Create a new Topic or Queue
+    # Internal: Create a new Topic or Queue
     #
     # address - the Connection Address string for the Kestrel Client
     # name    - the String name of the Topic
@@ -21,7 +21,7 @@ class Qup::Adapter::Kestrel
       ping
     end
 
-    # Public: Destroy the Topic
+    # Internal: Destroy the Topic or Queue
     #
     # If possible remove the existence of the Topic from the System
     #
@@ -31,6 +31,9 @@ class Qup::Adapter::Kestrel
       @admin_client.delete( name+"_errors" )
     end
 
+    # Internal: Make sure the Topic or Queue exists
+    #
+    # Returns nothing
     def ping
       @admin_client.peek( name )
       return true

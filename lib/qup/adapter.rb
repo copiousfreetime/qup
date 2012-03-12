@@ -1,6 +1,8 @@
 module Qup
-  # The known list of Adapters
+  # The list of registered Adapters
   Adapters = Hash.new
+
+  #
   # Public: The module that Qup Adapters must extend
   #
   # Any backing system that implements the Qup API must have an entry point that
