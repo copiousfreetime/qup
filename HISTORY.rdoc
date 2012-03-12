@@ -4,3 +4,6 @@
 
 * Initial public release
 
+== Version 1.1.0 - 2012-03-12
+
+* Addition of a Redis Adapter (thanks aniero)
