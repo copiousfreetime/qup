@@ -62,6 +62,7 @@ end
 # RDoc
 #------------------------------------------------------------------------------
 begin
+  gem 'rdoc' # otherwise we get the wrong task from stdlib
   require 'rdoc/task'
   RDoc::Task.new do |t|
     t.markup   = 'tomdoc'
