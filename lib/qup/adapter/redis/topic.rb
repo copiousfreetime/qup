@@ -11,17 +11,6 @@ class Qup::Adapter::Redis
   class Topic < Connection
     include Qup::TopicAPI
 
-    # Internal: create a new Topic
-    #
-    # uri  - the connection uri for the Redis Client
-    # name - the String name of the Topic
-    #
-    # Returns a new Topic.
-    def initialize(uri, name)
-      super
-      @subscribers = Hash.new
-    end
-
     # Internal: Creates a Publisher for the Topic
     #
     # Returns a new Publisher
@@ -29,7 +18,7 @@ class Qup::Adapter::Redis
       ::Qup::Publisher.new( self )
     end
 
-    # Internal: Create a subscriber for the Topic
+    # Internal: Create and register a subscriber for the Topic
     #
     # name - the String name of the subscriber
     #
@@ -38,14 +27,17 @@ class Qup::Adapter::Redis
     #
     # Returns a Subscriber
     def subscriber(name)
-      ::Qup::Subscriber.new( self, subscriber_queue_for(name) )
+      subscriber_name = "#{@name}.#{name}"
+      @client.sadd @name, subscriber_name
+      queue = ::Qup::Adapter::Redis::Queue.new(@uri, subscriber_name, @name)
+      ::Qup::Subscriber.new( self, queue )
     end
 
     # Internal: Return the number of Subscribers to this Topic
     #
     # Returns integer
     def subscriber_count
-      @subscribers.size
+      subscribers.size
     end
 
     # Internal: Publish a Message to all the Subscribers
@@ -54,8 +46,8 @@ class Qup::Adapter::Redis
     #
     # Returns nothing
     def publish( message )
-      @subscribers.values.each do |subscriber|
-        subscriber.produce message
+      subscribers.each do |subscriber|
+        @client.lpush subscriber, message
       end
     end
 
@@ -63,14 +55,12 @@ class Qup::Adapter::Redis
     private
     #######
 
-    # Private: create and register new sub-Queue for the given subscriber
+    # Private: retrieve the current list of subscribers
     #
-    # name - the name of the subscriber
-    #
-    # Returns a Queue
-    def subscriber_queue_for(name)
-      @subscribers[name] ||=
-        ::Qup::Adapter::Redis::Queue.new(@uri, "#{@name}-#{name}")
+    # Returns an array of subscriber queue names
+    def subscribers
+      @client.smembers @name
     end
+
   end
 end

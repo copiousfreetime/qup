@@ -9,12 +9,14 @@ class Qup::Adapter::Redis
 
     # Internal: create a new Queue
     #
-    # uri  - the connection uri for the Redis Client
-    # name - the String name of the Queue
+    # uri        - the connection uri for the Redis Client
+    # name       - the String name of the Queue
+    # topic_name - (optional) the String name of a parent topic
     #
     # Returns a new Queue.
-    def initialize( uri, name )
-      super
+    def initialize( uri, name, topic_name = nil )
+      super uri, name
+      @topic_name = topic_name
       @open_messages = {}
     end
 
@@ -25,6 +27,7 @@ class Qup::Adapter::Redis
     # Returns nothing.
     def destroy
       @client.del name
+      @client.srem @topic_name, name if @topic_name
     end
 
     # Internal: Empty the queue
@@ -73,7 +76,7 @@ class Qup::Adapter::Redis
     #
     # Returns a Message
     def consume(&block)
-      queue_name, data = @client.brpop @name, 0 # blocking pop
+      queue_name, data = @client.brpop name, 0 # blocking pop
       message = ::Qup::Message.new( data.object_id, data )
       @open_messages[message.key] = message
       if block_given? then
