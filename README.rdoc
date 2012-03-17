@@ -8,9 +8,10 @@ Qup is a generalized API for Message Queue and Publish/Subscribe messaging
 patterns with the ability to plug in an appropriate messaging infrastructure
 based upon your needs.
 
-Qup ships with support for {Kestrel}[https://github.com/robey/kestrel] and a
-filesystem infrastructure based on {Maildir}[https://rubygems.org/gems/maildir].
-Additional Adapters will be developed as needs arise. {Please submit an
+Qup ships with support for {Kestrel}[https://github.com/robey/kestrel],
+{Redis}[http://redis.io], and a filesystem infrastructure based on
+{Maildir}[https://rubygems.org/gems/maildir].  Additional Adapters will be
+developed as needs arise. {Please submit an
 Issue}[https://github.com/copiousfreetime/qup/issues] to have a new Adapter
 created. Pull requests gladly accepted.
 

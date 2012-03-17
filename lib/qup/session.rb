@@ -7,6 +7,7 @@ module Qup
   #
   #   Session.new( 'maildir:///tmp/qup' )
   #   Session.new( 'kestrel://user:pass@host:port/' )
+  #   Session.new( 'redis://host:port' )
   #
   #   session.queue( 'foo' ) # => Queue
   #   session.topic( 'bar' ) # => Topic

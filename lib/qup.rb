@@ -1,6 +1,6 @@
 module Qup
   # The Current Version of the library
-  VERSION = '1.1.0'
+  VERSION = '1.2.0'
 
   class Error < StandardError; end
 
