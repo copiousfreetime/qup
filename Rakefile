@@ -238,7 +238,7 @@ BEGIN {
   This = OpenStruct.new
   desc = Util.section_of( 'README.rdoc', 'DESCRIPTION')
   This.summary     = desc.first
-  This.description = desc.join("\n\n")
+  This.description = desc.join(" ").tr("\n", ' ').gsub(/[{}]/,'').gsub(/\[[^\]]+\]/,'') # strip rdoc
 
 
   This.exclude_from_manifest = %r/tmp$|\.(git|DS_Store)|^(doc|coverage|pkg)|\.gemspec$|\.swp$|\.jar|\.rvmrc$|~$/
