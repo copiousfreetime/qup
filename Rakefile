@@ -7,11 +7,14 @@ This.homepage = "http://github.com/copiousfreetime/#{ This.name }"
 This.version  = Util.version
 
 #------------------------------------------------------------------------------
-# If you want to Develop on qup just run 'rake develop' and you'll have all you
-# need to get going. If you want to use bundler for development, then run
-# 'rake develop:using_bundler'
+# If you want to Develop on this project just run 'rake develop' and you'll
+# have all you need to get going. If you want to use bundler for development,
+# then run 'rake develop:using_bundler'
 #------------------------------------------------------------------------------
 namespace :develop do
+
+  # Install all the development and runtime dependencies of this gem using the
+  # gemspec.
   task :default do
     require 'rubygems/dependency_installer'
     installer = Gem::DependencyInstaller.new
@@ -28,6 +31,7 @@ namespace :develop do
     puts "\n\nNow run 'rake test'"
   end
 
+  # Create a Gemfile that just references the gemspec
   file 'Gemfile' => :gemspec do
     File.open( "Gemfile", "w+" ) do |f|
       f.puts 'source :rubygems'
@@ -39,13 +43,15 @@ namespace :develop do
   task :using_bundler => 'Gemfile' do
     puts "Now you can 'bundle'"
   end
+
+  # Gemfiles are build artifacts
   CLOBBER << FileList['Gemfile*']
 end
 desc "Boostrap development"
 task :develop => "develop:default"
 
 #------------------------------------------------------------------------------
-# RSpec
+# RSpec - standard RSpec rake task
 #------------------------------------------------------------------------------
 begin
   require 'rspec/core/rake_task'
@@ -59,7 +65,8 @@ rescue LoadError
 end
 
 #------------------------------------------------------------------------------
-# RDoc
+# RDoc - standard rdoc rake task, although we must make sure to use a more
+#        recent version of rdoc since it is the one that has 'tomdoc' markup
 #------------------------------------------------------------------------------
 begin
   gem 'rdoc' # otherwise we get the wrong task from stdlib
@@ -76,7 +83,8 @@ rescue LoadError
 end
 
 #------------------------------------------------------------------------------
-# Coverage
+# Coverage - optional code coverage, rcov for 1.8 and simplecov for 1.9, so
+#            for the moment only rcov is listed.
 #------------------------------------------------------------------------------
 begin
   require 'rcov/rcovtask'
@@ -92,7 +100,8 @@ rescue LoadError
 end
 
 #------------------------------------------------------------------------------
-# Manifest - most of this is from Hoe
+# Manifest - We want an explicit list of thos files that are to be packaged in
+#            the gem. Most of this is from Hoe.
 #------------------------------------------------------------------------------
 namespace 'manifest' do
   desc "Check the manifest"
@@ -159,23 +168,40 @@ This.gemspec = Gem::Specification.new do |spec|
   spec.add_development_dependency( 'rdoc'  , '~> 3.12'   )
 
 end
+
+# The name of the gemspec file on disk
 This.gemspec_file = "#{This.name}.gemspec"
 
+# Really this is only here to support those who use bundler
 desc "Build the #{This.name}.gemspec file"
 task :gemspec do
   File.open( This.gemspec_file, "wb+" ) do |f|
     f.write This.gemspec.to_ruby
   end
 end
+
+# the gemspec is also a dev artifact and should not be kept around.
 CLOBBER << This.gemspec_file
 
+# The standard gem packaging task, everyone has it.
 require 'rubygems/package_task'
 Gem::PackageTask.new( This.gemspec ) do
   # nothing
 end
 
 #------------------------------------------------------------------------------
-# Release
+# Release - the steps we go through to do a final release, this is pulled from
+#           a compbination of mojombo's rakegem, hoe and hoe-git
+#
+# 1) make sure we are on the master branch
+# 2) make sure there are no uncommitted items
+# 3) check the manifest and make sure all looks good
+# 4) build the gem
+# 5) do an empty commit to have the commit message of the version
+# 6) tag that commit as the version
+# 7) push master
+# 8) push the tag
+# 7) pus the gem
 #------------------------------------------------------------------------------
 task :release_check do
   unless `git branch` =~ /^\* master$/
@@ -196,7 +222,15 @@ task :release => [ :release_check, 'manifest:check', :gem ] do
 end
 
 #------------------------------------------------------------------------------
-# Rakefile Support
+# Rakefile Support - This is all the guts and utility methods that are
+#                    necessary to support the above tasks.
+#
+# Lots of Credit for this Rakefile goes to:
+#
+#   Ara T. Howard       - see the Rakefile in all of his projects -
+#                          https://github.com/ahoward/
+#   Tom Preston Werner  - his Rakegem project https://github.com/mojombo/rakegem
+#   Seattle.rb          - Hoe - cuz it has relly good stuff in there
 #------------------------------------------------------------------------------
 BEGIN {
 
