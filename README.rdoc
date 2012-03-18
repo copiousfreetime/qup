@@ -100,6 +100,7 @@ messaging backends.
 
 * Qup::Adapter::Maildir - built in and uses the 'maildir' gem
 * Qup::Adapter::Kestrel - uses the 'kestrel-client' gem
+* Qup::Adapter::Redis   - uses the 'redis' gem
 
 == INSTALL
 
@@ -130,6 +131,15 @@ You can download Kestrel from http://robey.github.com/kestrel/ and then run the
 +scripts/devel.sh+ command and you will have a default Kestrel server running on
 <tt>localhost:22133</tt>. This will be enough to run the kestrel tests.
 
+=== Redis
+
+To run the Redis tests you will need:
+
+* gem install redis
+* A Redis server running on <tt>localhost:6479</tt>
+
+You can download redis using brew, macports or your favorite linux package
+manager.
 
 == LICENSE
 
