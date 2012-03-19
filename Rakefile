@@ -159,7 +159,6 @@ This.gemspec = Gem::Specification.new do |spec|
   # Additional functionality if used
   spec.add_development_dependency( 'kestrel-client'  , '~> 0.7.1' )
   spec.add_development_dependency( 'redis'           , '~> 2.2.2' )
-  spec.add_development_dependency( 'SystemTimer'     , '~> 1.2.3' )
 
   # The Development Dependencies
   spec.add_development_dependency( 'rake'  , '~> 0.9.2.2')
