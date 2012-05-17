@@ -5,8 +5,8 @@
 #
 
 module Qup
-  module Adapter
-    module Kestrel
+  class Adapter
+    class Kestrel
       module Thrift
       end
     end
