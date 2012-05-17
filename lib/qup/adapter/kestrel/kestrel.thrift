@@ -1,5 +1,31 @@
+/* This file is a slightly altered version of
+ * https://github.com/robey/kestrel/blob/eb52b41b88eeb1f20c6fdb5c749202b517ad45d5/src/main/thrift/kestrel.thrift
+ * and as such this file is Licensed according the Kestrel project.
+ *
+ * Changes made:
+ *   - made the alteration to add in the 'rb' namespace specifically for Qup.
+ *
+ * This software is licensed under the Apache 2 license, quoted below.
+ *
+ * Copyright 2009 Twitter, Inc.
+ * Copyright 2009 Robey Pointer <robeypointer@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+
 namespace java net.lag.kestrel.thrift
-namespace rb Qup.Adapter.Kestrel.Thrift
+namespace rb Qup.Adapter.Kestrel.Thrift /* line added for Qup */
 
 struct Item {
   /* the actual data */
