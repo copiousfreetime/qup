@@ -1,8 +1,13 @@
+require 'thrift_client'
+require 'qup/adapter/kestrel/thrift'
 class Qup::Adapter::Kestrel
   #
   # Internal: The Common base class for Kestrel Topic and Queue
   #
   class Destination
+    # Thrift client options
+    DEFAULTS = { :transport_wrapper => ::Thrift::FramedTransport }
+    DEFAULT_ITEM_TIMEOUT_MSEC = 60_000
 
     # Internal: the name of the Queue or Topic
     attr_reader :name
@@ -10,14 +15,15 @@ class Qup::Adapter::Kestrel
     # Internal: Create a new Topic or Queue
     #
     # address - the Connection Address string for the Kestrel Client
-    # name    - the String name of the Topic
+    # name    - the String name of the Topic or Queue
     #
-    # Returns a new Topic.
-    def initialize( address, name )
-      @address      = address
-      @client       = blocking_transactional_client( @address )
-      @admin_client = regular_client( @address )
-      @name         = name
+    # Returns a new Topic or Queue.
+    def initialize( address, name, stats_address )
+      @address       = address
+      @stats_address = stats_address
+      @servers       = [ @address ]
+      @client        = ::ThriftClient.new( Qup::Adapter::Kestrel::Thrift::Kestrel::Client, @servers, DEFAULTS )
+      @name          = name
       ping
     end
 
@@ -27,28 +33,15 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing.
     def destroy
-      @admin_client.delete( name )
-      @admin_client.delete( name+"_errors" )
+      @client.delete_queue( name )
     end
 
     # Internal: Make sure the Topic or Queue exists
     #
     # Returns nothing
     def ping
-      @admin_client.peek( name )
+      @client.peek( name )
       return true
-    end
-
-    #######
-    private
-    #######
-
-    def regular_client( addr )
-      Kestrel::Client.new( addr )
-    end
-
-    def blocking_transactional_client( addr )
-      Kestrel::Client::Blocking.new( Kestrel::Client::Transactional.new( regular_client(addr) ) )
     end
   end
 end

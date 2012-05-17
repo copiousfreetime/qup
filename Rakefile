@@ -157,8 +157,9 @@ This.gemspec = Gem::Specification.new do |spec|
   spec.add_runtime_dependency( 'maildir', '~> 2.0.0' )
 
   # Additional functionality if used
-  spec.add_development_dependency( 'kestrel-client'  , '~> 0.7.1' )
-  spec.add_development_dependency( 'redis'           , '~> 2.2.2' )
+  spec.add_development_dependency( 'thrift'       , '~> 0.8.0' )
+  spec.add_development_dependency( 'thrift_client', '~> 0.8.1' )
+  spec.add_development_dependency( 'redis'        , '~> 2.2.2' )
 
   # The Development Dependencies
   spec.add_development_dependency( 'rake'  , '~> 0.9.2.2')

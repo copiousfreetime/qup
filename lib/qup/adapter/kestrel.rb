@@ -1,5 +1,4 @@
 require 'qup/adapter'
-require 'kestrel-client'
 
 class Qup::Adapter
   # Internal: The backing adapter for Qup that uses Kestrel as the messaging
@@ -16,6 +15,7 @@ class Qup::Adapter
       @uri        = uri
       @addr       = "#{@uri.host}:#{@uri.port}"
       @options    = options
+      @stats_addr = "#{@uri.host}:#{options['httpPort'] || 2223}"
       @closed     = false
     end
 
@@ -25,7 +25,7 @@ class Qup::Adapter
     #
     # Returns a Qup::Queue
     def queue( name )
-      Qup::Adapter::Kestrel::Queue.new( @addr, name )
+      Qup::Adapter::Kestrel::Queue.new( @addr, name, @stats_addr )
     end
 
     # Internal: Create a new Topic from this Adapter
@@ -34,7 +34,7 @@ class Qup::Adapter
     #
     # Returns a Qup::Topic
     def topic( name )
-      Qup::Adapter::Kestrel::Topic.new( @addr, name )
+      Qup::Adapter::Kestrel::Topic.new( @addr, name, @stats_addr )
     end
 
     # Internal: Close the Kestrel adapter
@@ -52,5 +52,6 @@ class Qup::Adapter
     end
   end
 end
+require 'qup/adapter/kestrel/thrift'
 require 'qup/adapter/kestrel/queue'
 require 'qup/adapter/kestrel/topic'

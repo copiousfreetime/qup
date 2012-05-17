@@ -13,8 +13,8 @@ class Qup::Adapter::Kestrel
     # name    - the String name of the Topic
     #
     # Returns a new Queue
-    def initialize( address, name )
-      super(address, name)
+    def initialize( address, name, stats_address )
+      super(address, name, stats_address )
       @open_messages = {}
     end
 
@@ -25,7 +25,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing.
     def flush
-      @admin_client.flush(@name)
+      @client.flush_queue(@name)
     end
 
 
@@ -33,8 +33,8 @@ class Qup::Adapter::Kestrel
     #
     # Returns an integer of the Queue depth
     def depth
-      stats = @admin_client.stat( @name )
-      return stats['items']
+      queue_info = @client.peek( @name )
+      return queue_info.items
     end
 
 
@@ -50,7 +50,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns the Message that was put onto the Queue
     def produce( message )
-      @client.set( @name, message )
+      @client.put( @name, Array( message ), 0 ) # do not expire the message
       return ::Qup::Message.new( message.object_id, message )
     end
 
@@ -64,9 +64,11 @@ class Qup::Adapter::Kestrel
     #
     # Returns a Message
     def consume(&block)
-      data = @client.get( @name )
-      q_message = ::Qup::Message.new( data.object_id, data )
-      @open_messages[q_message.key] = q_message
+      # queue name, max_items( 1 ), timeout_mse (10 seconds ), auto_abort_msec (16 minutes)
+      msg_list  = @client.get( @name, 1, 10_000, 1_000_000 )
+      q_item    = msg_list.first
+      q_message = ::Qup::Message.new( q_item.id, q_item.data )
+      @open_messages[q_message.key] = q_item
       if block_given? then
         yield_message( q_message, &block )
       else
@@ -85,7 +87,7 @@ class Qup::Adapter::Kestrel
     def acknowledge( message )
       open_msg = @open_messages.delete( message.key )
       raise Qup::Error, "Message #{message.key} is not currently being consumed" unless open_msg
-      @client.close_last_transaction
+      @client.confirm( @name, Array( message.key )  )
     end
 
     #######

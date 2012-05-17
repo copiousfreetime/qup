@@ -1,3 +1,5 @@
+require 'json'
+require 'set'
 require 'qup/adapter/kestrel/destination'
 class Qup::Adapter::Kestrel
   #
@@ -27,20 +29,29 @@ class Qup::Adapter::Kestrel
     #
     # Returns a Subscriber
     def subscriber( name )
-      ::Qup::Subscriber.new( self, subscriber_queue( name ) )
+      ::Qup::Subscriber.new( self, subscriber_queue( name )  )
     end
 
 
     # Internal: Return the number of Subscribers to this Topic
     #
+    # We want the sub portion of the json document that is in the 'counters'
+    # section. The keys in the 'counters' section that represent queue counters
+    # are all prefixed with 'q/<queue_name>/<stat>'. To count the number of
+    # subscribers to this topic, we just count the uniqe <queue_name> elements
+    # that start with this queue's name and followed by a '+'
+    #
     # Returns integer
     def subscriber_count
-      c = 0
-      @client.stats['queues'].keys.each do |k|
-        next if k =~ /errors$/
-        c += 1 if k =~ /^#{@name}\+/
+      c = Set.new
+
+      stats['counters'].keys.each do |k|
+        next unless k =~ %r{^q/#{@name}\+}
+        parts = k.split("/")
+        c << parts[1]
       end
-      return c
+
+      return c.size
     end
 
     # Internal: Publish a Message to all the Subscribers
@@ -49,7 +60,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing
     def publish( message )
-      @client.set( @name, message )
+      @client.put( @name, Array( message ), 0 ) # do not expire the message
     end
 
     #######
@@ -58,11 +69,22 @@ class Qup::Adapter::Kestrel
 
     def subscriber_queue( sub_name )
       sname = subscriber_queue_name( sub_name )
-      ::Qup::Adapter::Kestrel::Queue.new( @address, sname )
+      ::Qup::Adapter::Kestrel::Queue.new( @address, sname, @stats_address )
     end
 
     def subscriber_queue_name( sub_name )
       "#{@name}+#{sub_name}"
+    end
+
+    def stats_uri
+      URI.parse( "http://#{@stats_address}/admin/stats.json" )
+    end
+
+    def stats
+      response = Net::HTTP.get_response( stats_uri )
+      json     = response.body
+
+      return ::JSON.parse( json )
     end
   end
 end
