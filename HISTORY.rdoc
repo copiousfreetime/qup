@@ -1,5 +1,9 @@
 = Changelog
 
+== Version 1.2.1 - 2012-05-17
+
+* Use the thrift interface to kestrel instead of the memcache interface
+
 == Version 1.2.0 - 2012-03-17
 
 * Persistent subscriptions for the Redis Adapter (thanks aniero)
