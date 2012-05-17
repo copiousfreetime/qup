@@ -1,3 +1,8 @@
+if RUBY_VERSION >= '1.9.2' then
+  require 'simplecov'
+  SimpleCov.start if ENV['COVERAGE']
+end
+
 require "rspec/autorun"
 require 'qup'
 
@@ -24,3 +29,4 @@ RSpec.configure do |conf|
     end
   end
 end
+

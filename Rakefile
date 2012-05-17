@@ -56,7 +56,7 @@ task :develop => "develop:default"
 begin
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new( :test ) do |t|
-    t.ruby_opts    = %w[ -w ]
+    #t.ruby_opts    = %w[ -w ]
     t.rspec_opts   = %w[ --color --format documentation ]
   end
   task :default => :test
@@ -86,17 +86,30 @@ end
 # Coverage - optional code coverage, rcov for 1.8 and simplecov for 1.9, so
 #            for the moment only rcov is listed.
 #------------------------------------------------------------------------------
-begin
-  require 'rcov/rcovtask'
-  Rcov::RcovTask.new do |t|
-    t.libs      << 'spec'
-    t.pattern   = 'spec/**/*_spec.rb'
-    t.verbose   = true
-    t.rcov_opts << "-x ^/"           # remove all the global files
-    t.rcov_opts << "--sort coverage" # so we see the worst files at the top
+if RUBY_VERSION < "1.9.2"
+  begin
+    require 'rcov/rcovtask'
+    Rcov::RcovTask.new( :coverage ) do |t|
+      t.libs      << 'spec'
+      t.pattern   = 'spec/**/*_spec.rb'
+      t.verbose   = true
+      t.rcov_opts << "-x ^/"           # remove all the global files
+      t.rcov_opts << "--sort coverage" # so we see the worst files at the top
+    end
+  rescue LoadError
+    Util.task_warning( 'rcov' )
   end
-rescue LoadError
-  Util.task_warning( 'rcov' )
+else
+  begin
+    require 'simplecov'
+    desc "Run tests with code coverage"
+    task :coverage do
+      ENV['COVERAGE'] = 'true'
+      Rake::Task[:test].execute
+    end
+  rescue LoadError
+    Util.task_warning( 'simplecov' )
+  end
 end
 
 #------------------------------------------------------------------------------
@@ -163,7 +176,11 @@ This.gemspec = Gem::Specification.new do |spec|
 
   # The Development Dependencies
   spec.add_development_dependency( 'rake'  , '~> 0.9.2.2')
-  spec.add_development_dependency( 'rcov'  , '~> 1.0.0'  )
+  if RUBY_VERSION < "1.9.2" then
+    spec.add_development_dependency( 'rcov'  , '~> 0.9.11'  )
+  else
+    spec.add_development_dependency( 'simplecov', '~> 0.6.4' )
+  end
   spec.add_development_dependency( 'rspec' , '~> 2.8.0'  )
   spec.add_development_dependency( 'rdoc'  , '~> 3.12'   )
 
