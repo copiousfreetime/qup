@@ -5,7 +5,7 @@
 #
 
 require 'thrift'
-require 'kestrel_constants'
+require 'kestrel_types'
 
 module Qup
   module Adapter
