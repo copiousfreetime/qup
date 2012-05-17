@@ -1,6 +1,6 @@
 = Changelog
 
-== Version 1.2.1 - 2012-05-17
+== Version 1.2.2 - 2012-05-17
 
 * Use the thrift interface to kestrel instead of the memcache interface
 
