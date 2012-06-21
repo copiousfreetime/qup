@@ -67,7 +67,7 @@ class Qup::Adapter::Kestrel
       # queue name, max_items( 1 ), timeout_mse (10 seconds ), auto_abort_msec (16 minutes)
       msg_list  = @client.get( @name, 1, 10_000, 1_000_000 )
       q_item    = msg_list.first
-      q_message = ::Qup::Message.new( q_item.id, q_item.data )
+      q_message = ::Qup::Message.new( q_item.id, unmarshal_if_marshalled( q_item.data ))
       @open_messages[q_message.key] = q_item
       if block_given? then
         yield_message( q_message, &block )
@@ -93,6 +93,15 @@ class Qup::Adapter::Kestrel
     #######
     private
     #######
+
+    def unmarshal_if_marshalled( data )
+      if data[0].ord == 4 and data[1].ord == 8 then
+        Marshal::load( data )
+      else
+        data
+      end
+    end
+
 
     def yield_message( message, &block )
       yield message
