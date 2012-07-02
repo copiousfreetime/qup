@@ -64,9 +64,10 @@ class Qup::Adapter::Kestrel
     #
     # Returns a Message
     def consume(&block)
-      # queue name, max_items( 1 ), timeout_mse (10 seconds ), auto_abort_msec (16 minutes)
-      msg_list  = @client.get( @name, 1, 10_000, 1_000_000 )
+      # queue name, max_items( 1 ), timeout_mse (0 - don't block), auto_abort_msec (16 minutes)
+      msg_list  = @client.get( @name, 1, 0, 1_000_000 )
       q_item    = msg_list.first
+      return unless q_item
       q_message = ::Qup::Message.new( q_item.id, unmarshal_if_marshalled( q_item.data ))
       @open_messages[q_message.key] = q_item
       if block_given? then
