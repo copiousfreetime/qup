@@ -76,7 +76,8 @@ class Qup::Adapter::Redis
     #
     # Returns a Message
     def consume(&block)
-      queue_name, data = @client.brpop name, 0 # blocking pop
+      data = @client.rpop( name )
+      return if data.nil?
       message = ::Qup::Message.new( data.object_id, data )
       @open_messages[message.key] = message
       if block_given? then

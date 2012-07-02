@@ -49,6 +49,11 @@ shared_examples Qup::QueueAPI do
         msg.data.should eq 'consumeable message'
       end
     end
+
+    it 'returns nil if the queue is empty (it is non-blocking)' do
+      queue.consume
+      queue.consume.should == nil
+    end
   end
 
   describe "#acknowledge" do
