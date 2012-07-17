@@ -1,4 +1,5 @@
 require 'thrift'
+require 'thrift_client'
 require 'qup/adapter/kestrel/thrift/kestrel_constants'
 require 'qup/adapter/kestrel/thrift/kestrel_types'
 require 'qup/adapter/kestrel/thrift/kestrel'
