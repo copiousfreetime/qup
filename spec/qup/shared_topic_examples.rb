@@ -53,5 +53,11 @@ shared_examples Qup::TopicAPI do
         msg.data.should eq 'hi all'
       end
     end
+
+    it "#produce does not create multiple messages for newlines" do
+      p = @topic.publisher
+      p.publish( "one\nsingle\nmessage" )
+      @subs.first.depth.should eq 1
+    end
   end
 end

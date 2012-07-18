@@ -60,7 +60,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing
     def publish( message )
-      @client.put( @name, Array( message ), 0 ) # do not expire the message
+      @client.put( @name, [ message ], 0 ) # do not expire the message
     end
 
     #######
