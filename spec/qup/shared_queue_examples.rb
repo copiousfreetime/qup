@@ -26,6 +26,11 @@ shared_examples Qup::QueueAPI do
     queue.depth.should eq 1
   end
 
+  it "#produce does not create multiple messages for newlines" do
+    queue.produce( "one\nsingle\nmessage" )
+    queue.depth.should eq 1
+  end
+
   it "#flush" do
     10.times { |x| queue.produce( "message #{x}" ) }
     queue.depth.should eq 10

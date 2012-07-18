@@ -50,7 +50,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns the Message that was put onto the Queue
     def produce( message )
-      @client.put( @name, Array( message ), 0 ) # do not expire the message
+      @client.put( @name, Destination.wrap(message), 0 ) # do not expire the message
       return ::Qup::Message.new( message.object_id, message )
     end
 
@@ -88,7 +88,7 @@ class Qup::Adapter::Kestrel
     def acknowledge( message )
       open_msg = @open_messages.delete( message.key )
       raise Qup::Error, "Message #{message.key} is not currently being consumed" unless open_msg
-      @client.confirm( @name, Array( message.key )  )
+      @client.confirm( @name, Destination.wrap( message.key ) )
     end
 
     #######
