@@ -20,15 +20,17 @@ shared_examples Qup::QueueAPI do
     queue.name.should eq 'foo'
   end
 
-  it "#produce" do
-    queue.depth.should eq 0
-    queue.produce( "a new message" )
-    queue.depth.should eq 1
-  end
+  describe "#produce" do
+    it "produces an item on the queue" do
+      queue.depth.should eq 0
+      queue.produce( "a new message" )
+      queue.depth.should eq 1
+    end
 
-  it "#produce does not create multiple messages for newlines" do
-    queue.produce( "one\nsingle\nmessage" )
-    queue.depth.should eq 1
+    it "does not create multiple messages for newlines" do
+      queue.produce( "one\nsingle\nmessage" )
+      queue.depth.should eq 1
+    end
   end
 
   it "#flush" do

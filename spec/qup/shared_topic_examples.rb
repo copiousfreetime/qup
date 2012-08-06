@@ -54,10 +54,12 @@ shared_examples Qup::TopicAPI do
       end
     end
 
-    it "#produce does not create multiple messages for newlines" do
+    it "only receive a single message for a message containing newlines" do
       p = @topic.publisher
       p.publish( "one\nsingle\nmessage" )
-      @subs.first.depth.should eq 1
+      @subs.each do |sub|
+        sub.depth.should eq 1
+      end
     end
   end
 end
