@@ -12,7 +12,11 @@ class Qup::Adapter::Kestrel
     # Internal: the name of the Queue or Topic
     attr_reader :name
 
-    # Utility method to return an array given either an array or scalar
+    # Internal: wrap an object in an Array if it is not an Array.
+    #
+    # array_or_scalar - the object to wrap
+    #
+    # Returns an Array
     def self.wrap(array_or_scalar)
       array_or_scalar.is_a?(Array) ? array_or_scalar : [ array_or_scalar ]
     end
