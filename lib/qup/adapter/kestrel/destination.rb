@@ -12,6 +12,11 @@ class Qup::Adapter::Kestrel
     # Internal: the name of the Queue or Topic
     attr_reader :name
 
+    # Utility method to return an array given either an array or scalar
+    def self.wrap(array_or_scalar)
+      array_or_scalar.is_a?(Array) ? array_or_scalar : [ array_or_scalar ]
+    end
+
     # Internal: Create a new Topic or Queue
     #
     # address - the Connection Address string for the Kestrel Client
