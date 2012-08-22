@@ -37,6 +37,8 @@ require 'qup/queue_api'
 require 'qup/session'
 require 'qup/subscriber'
 require 'qup/topic_api'
+require 'qup/drainer'
+require 'qup/backoff_sleeper'
 
 # Load the known adapters, print a warning if $VERBOSE is set
 Qup::KNOWN_ADAPTERS.each do |adapter, gemname|
