@@ -30,6 +30,7 @@ end
 
 require 'qup/adapter'
 require 'qup/consumer'
+require 'qup/batch_consumer'
 require 'qup/message'
 require 'qup/producer'
 require 'qup/publisher'
@@ -37,7 +38,6 @@ require 'qup/queue_api'
 require 'qup/session'
 require 'qup/subscriber'
 require 'qup/topic_api'
-require 'qup/drainer'
 require 'qup/backoff_sleeper'
 
 # Load the known adapters, print a warning if $VERBOSE is set
