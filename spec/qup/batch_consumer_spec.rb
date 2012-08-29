@@ -3,9 +3,9 @@ require "tmpdir"
 require "timeout"
 
 module Qup
-  describe Drainer do
+  describe BatchConsumer do
     class Client
-      include Qup::DrainerAPI
+      include Qup::BatchConsumerAPI
 
       def process(message)
         messages << message.data
@@ -25,57 +25,57 @@ module Qup
         queue.producer.produce("A")
 
         empty_client = Class.new do
-          include Qup::DrainerAPI
+          include Qup::BatchConsumerAPI
 
           def process(*)
           end
         end
 
-        drainer = Drainer.new({
+        batch_consumer = BatchConsumer.new({
           :max_size => 1,
           :client => empty_client.new,
           :queue_uri => queue_uri,
           :queue_name => queue_name
         })
 
-        drainer.run
+        batch_consumer.run
       end
 
       it "does blow up if #process isn't defined" do
         queue.producer.produce("A")
 
         empty_client = Class.new do
-          include Qup::DrainerAPI
+          include Qup::BatchConsumerAPI
         end
 
-        drainer = Drainer.new({
+        batch_consumer = BatchConsumer.new({
           :max_size => 1,
           :client => empty_client.new,
           :queue_uri => queue_uri,
           :queue_name => queue_name
         })
 
-        expect { drainer.run }.to raise_error(NotImplementedError)
+        expect { batch_consumer.run }.to raise_error(NotImplementedError)
       end
 
       it "calls process until max_size is met" do
         ["A", "B", "C"].each { |d| queue.producer.produce(d) }
 
         client  = Client.new
-        drainer = Drainer.new({
+        batch_consumer = BatchConsumer.new({
           :client => client,
           :max_size => 2,
           :queue_uri => queue_uri,
           :queue_name => queue_name
         })
 
-        drainer.run
+        batch_consumer.run
         client.messages.should == ["A", "B"]
       end
 
       it "returns when max_age is met" do
         client = Client.new
-        drainer = Drainer.new({
+        batch_consumer = BatchConsumer.new({
           :client => client,
           :max_size => 1,
           :max_age => 0.001,
@@ -83,7 +83,7 @@ module Qup
           :queue_name => queue_name
         })
 
-        Timeout.timeout(1) { drainer.run } # Does not hang
+        Timeout.timeout(1) { batch_consumer.run } # Does not hang
       end
 
       it "returns when max_age and max_size are present and one of the values is met" do
@@ -92,7 +92,7 @@ module Qup
 
         ["A", "B", "C"].each { |d| queue.producer.produce(d) }
 
-        drainer = Drainer.new({
+        batch_consumer = BatchConsumer.new({
           :client => client,
           :max_size => 1,
           :max_age => 5,
@@ -100,7 +100,7 @@ module Qup
           :queue_name => queue_name
         })
 
-        drainer.run
+        batch_consumer.run
         client.messages.should == ["A"]
 
       end
@@ -111,7 +111,7 @@ module Qup
 
         client = Client.new
 
-        drainer = Drainer.new({
+        batch_consumer = BatchConsumer.new({
           :max_size => 1,
           :client => client,
           :queue_uri => queue_uri,
@@ -122,7 +122,7 @@ module Qup
         client.should_receive(:process).once.ordered
         client.should_receive(:teardown).once.ordered
 
-        drainer.run
+        batch_consumer.run
       end
     end
   end

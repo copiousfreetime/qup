@@ -1,5 +1,5 @@
 module Qup
-  module DrainerAPI
+  module BatchConsumerAPI
     def setup
     end
 
@@ -11,7 +11,7 @@ module Qup
     end
   end
 
-  class Drainer
+  class BatchConsumer
 
     def initialize(config = {})
       @message_count = 0
