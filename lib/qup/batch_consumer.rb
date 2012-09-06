@@ -12,7 +12,7 @@
 # teardown - Optional. Called after the client has received :max_size
 #   messages OR :max_age has been exceeded.
 #
-# BatchConsumers should be only be run once. If you need to run aain, create
+# BatchConsumers should be only be run once. If you need to run again, create
 # a new instance.
 #
 # See #initialize for the config options.
