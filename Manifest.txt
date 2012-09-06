@@ -24,8 +24,8 @@ lib/qup/adapter/redis/connection.rb
 lib/qup/adapter/redis/queue.rb
 lib/qup/adapter/redis/topic.rb
 lib/qup/backoff_sleeper.rb
+lib/qup/batch_consumer.rb
 lib/qup/consumer.rb
-lib/qup/drainer.rb
 lib/qup/message.rb
 lib/qup/producer.rb
 lib/qup/publisher.rb
@@ -47,8 +47,8 @@ spec/qup/adapter/redis_context.rb
 spec/qup/adapter/redis_spec.rb
 spec/qup/adapter_spec.rb
 spec/qup/backoff_sleeper_sleeper_spec.rb
+spec/qup/batch_consumer_spec.rb
 spec/qup/consumer_spec.rb
-spec/qup/drainer_spec.rb
 spec/qup/message_spec.rb
 spec/qup/producer_spec.rb
 spec/qup/queue_api_spec.rb
