@@ -27,11 +27,14 @@ class Qup::Adapter::Kestrel
     # name    - the String name of the Topic or Queue
     #
     # Returns a new Topic or Queue.
-    def initialize( address, name, stats_address )
+    def initialize( address, name, stats_address, options = {} )
+      client_options = DEFAULTS.merge( options[:client] || {} )
+
+      @options       = options
       @address       = address
       @stats_address = stats_address
       @servers       = [ @address ]
-      @client        = ::ThriftClient.new( Qup::Adapter::Kestrel::Thrift::Kestrel::Client, @servers, DEFAULTS )
+      @client        = ::ThriftClient.new( Qup::Adapter::Kestrel::Thrift::Kestrel::Client, @servers, client_options )
       @name          = name
       ping
     end

@@ -25,7 +25,7 @@ class Qup::Adapter
     #
     # Returns a Qup::Queue
     def queue( name )
-      Qup::Adapter::Kestrel::Queue.new( @addr, name, @stats_addr )
+      Qup::Adapter::Kestrel::Queue.new( @addr, name, @stats_addr, @options )
     end
 
     # Internal: Create a new Topic from this Adapter
@@ -34,7 +34,7 @@ class Qup::Adapter
     #
     # Returns a Qup::Topic
     def topic( name )
-      Qup::Adapter::Kestrel::Topic.new( @addr, name, @stats_addr )
+      Qup::Adapter::Kestrel::Topic.new( @addr, name, @stats_addr, @options )
     end
 
     # Internal: Close the Kestrel adapter
