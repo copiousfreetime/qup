@@ -20,6 +20,9 @@ module Qup
     # Public: The URI of this Session
     attr_reader :uri
 
+    # Internal: access the adapter specific options.
+    attr_reader :options
+
     # Public: Create a new Session
     #
     # uri     - The connection String used to connect to appropriate provider
@@ -47,9 +50,10 @@ module Qup
     def initialize( uri, options = {} )
       @uri       = URI.parse( uri )
       @root_path = Pathname.new( @uri.path )
+      @options   = options
 
       adapter_klass = Qup::Adapters[@uri.scheme]
-      @adapter      = adapter_klass.new( @uri, options )
+      @adapter      = adapter_klass.new( @uri, @options )
 
       @queues  = Hash.new
       @topics  = Hash.new

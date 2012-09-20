@@ -13,8 +13,8 @@ class Qup::Adapter::Kestrel
     # name    - the String name of the Topic
     #
     # Returns a new Queue
-    def initialize( address, name, stats_address )
-      super(address, name, stats_address )
+    def initialize( address, name, stats_address, options )
+      super(address, name, stats_address, options )
       @open_messages = {}
     end
 

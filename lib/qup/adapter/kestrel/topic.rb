@@ -69,7 +69,7 @@ class Qup::Adapter::Kestrel
 
     def subscriber_queue( sub_name )
       sname = subscriber_queue_name( sub_name )
-      ::Qup::Adapter::Kestrel::Queue.new( @address, sname, @stats_address )
+      ::Qup::Adapter::Kestrel::Queue.new( @address, sname, @stats_address, @options )
     end
 
     def subscriber_queue_name( sub_name )
