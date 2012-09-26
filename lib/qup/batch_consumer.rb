@@ -15,7 +15,7 @@
 # BatchConsumers should be only be run once. If you need to run again, create
 # a new instance.
 #
-# See #initialize for the config options.
+# See #initialize for the configuration options.
 #
 # Examples:
 #
@@ -75,11 +75,10 @@ module Qup
     #                     the first constraint is met. If neither constraint is
     #                     provided, the BatchConsumer will never finish (i.e. #run
     #                     will block indefinitely). Optional.
-    def initialize(config = {})
+    def initialize(options = {})
       @message_count = 0
-      @config        = config
+      @options       = options
     end
-
 
     def run
       @start = Time.now
@@ -97,10 +96,14 @@ module Qup
       client.teardown
     end
 
+    def session
+      @session ||= Qup::Session.new(@options[:queue_uri], @options[:session_options] || {})
+    end
+
     private
 
     def client
-      @config[:client]
+      @options[:client]
     end
 
     def sleeper
@@ -108,7 +111,9 @@ module Qup
     end
 
     def consumer
-      @consumer ||= Qup::Session.new(@config[:queue_uri]).queue(@config[:queue_name]).consumer
+      @consumer ||= begin
+        session.queue(@options[:queue_name]).consumer
+      end
     end
 
     def live?
@@ -116,11 +121,11 @@ module Qup
     end
 
     def too_big?
-      @message_count >= @config[:max_size] if @config[:max_size]
+      @message_count >= @options[:max_size] if @options[:max_size]
     end
 
     def too_old?
-      (Time.now - @start) > @config[:max_age] if @config[:max_age]
+      (Time.now - @start) > @options[:max_age] if @options[:max_age]
     end
 
   end
