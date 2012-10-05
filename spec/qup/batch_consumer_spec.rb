@@ -16,6 +16,17 @@ module Qup
       end
     end
 
+    describe "#new" do
+      it "passes options[:session_options] to the session" do
+        session_options = double
+        batch_consumer = BatchConsumer.new({
+          :session_options => session_options,
+          :queue_uri => "maildir://#{Dir.mktmpdir}"
+        })
+        batch_consumer.session.options.should == session_options
+      end
+    end
+
     describe "#run" do
       let(:queue_uri) { "maildir://#{Dir.mktmpdir}" }
       let(:queue_name) { "test" }
