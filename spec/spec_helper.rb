@@ -20,10 +20,11 @@ RSpec.configure do |conf|
   Qup::KNOWN_ADAPTERS.each do |adapter, gemname|
     begin
       require "qup/adapter/#{adapter}"
-    rescue LoadError
+    rescue LoadError => e
       warn "NOTICE:"
       warn "NOTICE: The tests for the '#{adapter}' will be skipped as the '#{gemname}' is not installed"
       warn "NOTICE:"
+      warn "LoadError: #{e}"
       sym = adapter.to_sym
       conf.filter_run_excluding sym => true
     end
