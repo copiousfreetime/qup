@@ -13,8 +13,8 @@ class Qup::Adapter::Kestrel
     # name    - the String name of the Topic
     #
     # Returns a new Queue
-    def initialize( address, name, stats_address, options )
-      super(address, name, stats_address, options )
+    def initialize( client, name )
+      super( client, name )
       @open_messages = {}
     end
 
@@ -25,7 +25,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing.
     def flush
-      @client.flush_queue(@name)
+      @client.flush(@name)
     end
 
 
@@ -33,8 +33,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns an integer of the Queue depth
     def depth
-      queue_info = @client.peek( @name )
-      return queue_info.items
+      @client.stats['queues'][@name]['items']
     end
 
 
@@ -42,15 +41,12 @@ class Qup::Adapter::Kestrel
     #
     # message - the data to put onto the queue.
     #
-    # The 'message' that is passed in is wrapped in a Qup::Message before being
-    # stored.
-    #
     # A user of the Qup API should use a Producer instance to put items onto the
     # queue.
     #
     # Returns the Message that was put onto the Queue
     def produce( message )
-      @client.put( @name, Destination.wrap(message), 0 ) # do not expire the message
+      @client.set( @name, message )
       return ::Qup::Message.new( message.object_id, message )
     end
 
@@ -64,11 +60,9 @@ class Qup::Adapter::Kestrel
     #
     # Returns a Message
     def consume(&block)
-      # queue name, max_items( 1 ), timeout_mse (0 - don't block), auto_abort_msec (16 minutes)
-      msg_list  = @client.get( @name, 1, 0, 1_000_000 )
-      q_item    = msg_list.first
+      q_item = @client.reserve( @name )
       return unless q_item
-      q_message = ::Qup::Message.new( q_item.id, unmarshal_if_marshalled( q_item.data ))
+      q_message = ::Qup::Message.new( q_item.object_id, unmarshal_if_marshalled( q_item ))
       @open_messages[q_message.key] = q_item
       if block_given? then
         yield_message( q_message, &block )
@@ -88,7 +82,7 @@ class Qup::Adapter::Kestrel
     def acknowledge( message )
       open_msg = @open_messages.delete( message.key )
       raise Qup::Error, "Message #{message.key} is not currently being consumed" unless open_msg
-      @client.confirm( @name, Destination.wrap( message.key ) )
+      @client.close( @name )
     end
 
     #######

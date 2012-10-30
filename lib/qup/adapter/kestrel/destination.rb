@@ -1,25 +1,10 @@
-require 'thrift_client'
-require 'qup/adapter/kestrel/thrift'
 class Qup::Adapter::Kestrel
   #
   # Internal: The Common base class for Kestrel Topic and Queue
   #
   class Destination
-    # Thrift client options
-    DEFAULTS = { :transport_wrapper => ::Thrift::FramedTransport }
-    DEFAULT_ITEM_TIMEOUT_MSEC = 60_000
-
     # Internal: the name of the Queue or Topic
     attr_reader :name
-
-    # Internal: wrap an object in an Array if it is not an Array.
-    #
-    # array_or_scalar - the object to wrap
-    #
-    # Returns an Array
-    def self.wrap(array_or_scalar)
-      array_or_scalar.is_a?(Array) ? array_or_scalar : [ array_or_scalar ]
-    end
 
     # Internal: Create a new Topic or Queue
     #
@@ -27,15 +12,9 @@ class Qup::Adapter::Kestrel
     # name    - the String name of the Topic or Queue
     #
     # Returns a new Topic or Queue.
-    def initialize( address, name, stats_address, options = {} )
-      client_options = DEFAULTS.merge( options[:client] || {} )
-
-      @options       = options
-      @address       = address
-      @stats_address = stats_address
-      @servers       = [ @address ]
-      @client        = ::ThriftClient.new( Qup::Adapter::Kestrel::Thrift::Kestrel::Client, @servers, client_options )
-      @name          = name
+    def initialize( client, name )
+      @client = client
+      @name   = name
       ping
     end
 
@@ -45,7 +24,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing.
     def destroy
-      @client.delete_queue( name )
+      @client.delete( name )
     end
 
     # Internal: Make sure the Topic or Queue exists

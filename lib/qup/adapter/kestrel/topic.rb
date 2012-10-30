@@ -45,9 +45,9 @@ class Qup::Adapter::Kestrel
     def subscriber_count
       c = Set.new
 
-      stats['counters'].keys.each do |k|
-        next unless k =~ %r{^q/#{@name}\+}
-        parts = k.split("/")
+      stats['queues'].keys.each do |k|
+        next unless k =~ %r{\A#{@name}\+}
+        parts = k.split("+")
         c << parts[1]
       end
 
@@ -60,7 +60,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing
     def publish( message )
-      @client.put( @name, Destination.wrap( message ), 0 ) # do not expire the message
+      @client.set( @name,  message ) # do not expire the message
     end
 
     #######
@@ -69,22 +69,15 @@ class Qup::Adapter::Kestrel
 
     def subscriber_queue( sub_name )
       sname = subscriber_queue_name( sub_name )
-      ::Qup::Adapter::Kestrel::Queue.new( @address, sname, @stats_address, @options )
+      ::Qup::Adapter::Kestrel::Queue.new( @client, sname )
     end
 
     def subscriber_queue_name( sub_name )
       "#{@name}+#{sub_name}"
     end
 
-    def stats_uri
-      URI.parse( "http://#{@stats_address}/admin/stats.json" )
-    end
-
     def stats
-      response = Net::HTTP.get_response( stats_uri )
-      json     = response.body
-
-      return ::JSON.parse( json )
+      @client.stats
     end
   end
 end

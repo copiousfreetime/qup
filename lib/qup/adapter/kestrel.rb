@@ -1,4 +1,5 @@
 require 'qup/adapter'
+require 'kjess'
 
 class Qup::Adapter
   # Internal: The backing adapter for Qup that uses Kestrel as the messaging
@@ -13,9 +14,11 @@ class Qup::Adapter
     # uri - the URI instance for this adapter to use
     def initialize( uri, options = {} )
       @uri        = uri
-      @addr       = "#{@uri.host}:#{@uri.port}"
+      @host       = @uri.host
+      @port       = @uri.port.to_i
       @options    = options
-      @stats_addr = "#{@uri.host}:#{options['httpPort'] || 2223}"
+      @client     = KJess::Client.new( :host => @host, :port => @port )
+      @client.ping
       @closed     = false
     end
 
@@ -25,7 +28,7 @@ class Qup::Adapter
     #
     # Returns a Qup::Queue
     def queue( name )
-      Qup::Adapter::Kestrel::Queue.new( @addr, name, @stats_addr, @options )
+      Qup::Adapter::Kestrel::Queue.new( @client, name )
     end
 
     # Internal: Create a new Topic from this Adapter
@@ -34,24 +37,23 @@ class Qup::Adapter
     #
     # Returns a Qup::Topic
     def topic( name )
-      Qup::Adapter::Kestrel::Topic.new( @addr, name, @stats_addr, @options )
+      Qup::Adapter::Kestrel::Topic.new( @client, name )
     end
 
     # Internal: Close the Kestrel adapter
     #
     # Return nothing
     def close
-      @closed = true
+      @client.disconnect
     end
 
     # Internal: Is the Kestrel Adapter closed
     #
     # Returns true or false
     def closed?
-      @closed
+      not @client.connected?
     end
   end
 end
-require 'qup/adapter/kestrel/thrift'
 require 'qup/adapter/kestrel/queue'
 require 'qup/adapter/kestrel/topic'
