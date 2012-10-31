@@ -11,21 +11,21 @@ module Qup
         sleeper = BackoffSleeper.new
         sleeper.stub(:multiplier => 1)
 
-        sleeper.length.should == (1 + (1 * 0.5)) / 2
+        sleeper.length.should be == ((1 + (1 * 0.5)) / 2)
       end
     end
 
     describe "#tick" do
       it "starts count at 0" do
-        subject.count.should == 0
+        subject.count.should be == 0
       end
 
       it "increments count by 1 everytime it's called" do
         subject.tick
-        subject.count.should == 1
+        subject.count.should be == 1
 
         subject.tick
-        subject.count.should == 2
+        subject.count.should be == 2
       end
 
       it "sleeps for #length if length is > 0" do
@@ -52,7 +52,7 @@ module Qup
 
     describe "#multiplier" do
       it "starts at 0" do
-        subject.multiplier.should == 0
+        subject.multiplier.should be == 0
       end
 
       it "backs off exponentially" do
@@ -61,7 +61,7 @@ module Qup
           subject.multiplier
         end
 
-        multipliers.should == [0.01, 0.1, 1]
+        multipliers.should be == [0.01, 0.1, 1]
       end
 
       it "maxes out at the last value of MULTIPLIERS" do
