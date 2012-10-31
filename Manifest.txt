@@ -9,12 +9,7 @@ lib/qup.rb
 lib/qup/adapter.rb
 lib/qup/adapter/kestrel.rb
 lib/qup/adapter/kestrel/destination.rb
-lib/qup/adapter/kestrel/kestrel.thrift
 lib/qup/adapter/kestrel/queue.rb
-lib/qup/adapter/kestrel/thrift.rb
-lib/qup/adapter/kestrel/thrift/kestrel.rb
-lib/qup/adapter/kestrel/thrift/kestrel_constants.rb
-lib/qup/adapter/kestrel/thrift/kestrel_types.rb
 lib/qup/adapter/kestrel/topic.rb
 lib/qup/adapter/maildir.rb
 lib/qup/adapter/maildir/queue.rb
