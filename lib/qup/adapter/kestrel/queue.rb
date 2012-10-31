@@ -58,17 +58,16 @@ class Qup::Adapter::Kestrel
     # A user of the Qup API should use a Consumer instance to retrieve items
     # from the Queue.
     #
-    # Returns a Message
+    # Returns a Message or nil if no message was on the queue
     def consume(&block)
       q_item = @client.reserve( @name )
-      return unless q_item
+      return nil unless q_item
       q_message = ::Qup::Message.new( q_item.object_id, unmarshal_if_marshalled( q_item ))
       @open_messages[q_message.key] = q_item
       if block_given? then
         yield_message( q_message, &block )
-      else
-        return q_message
       end
+      return q_message
     end
 
 
