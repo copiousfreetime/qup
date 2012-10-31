@@ -1,6 +1,6 @@
 module Qup
   # The Current Version of the library
-  VERSION = '1.2.0'
+  VERSION = '1.3.7'
 
   class Error < StandardError; end
 
@@ -23,13 +23,14 @@ module Qup
   KNOWN_ADAPTERS = {
     # require => gem
     'maildir' => 'maildir',
-    'kestrel' => 'kestrel-client',
+    'kestrel' => 'kjess',
     'redis'   => 'redis'
   }
 end
 
 require 'qup/adapter'
 require 'qup/consumer'
+require 'qup/batch_consumer'
 require 'qup/message'
 require 'qup/producer'
 require 'qup/publisher'
@@ -37,6 +38,7 @@ require 'qup/queue_api'
 require 'qup/session'
 require 'qup/subscriber'
 require 'qup/topic_api'
+require 'qup/backoff_sleeper'
 
 # Load the known adapters, print a warning if $VERBOSE is set
 Qup::KNOWN_ADAPTERS.each do |adapter, gemname|

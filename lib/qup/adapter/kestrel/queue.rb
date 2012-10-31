@@ -13,8 +13,8 @@ class Qup::Adapter::Kestrel
     # name    - the String name of the Topic
     #
     # Returns a new Queue
-    def initialize( address, name )
-      super(address, name)
+    def initialize( client, name )
+      super( client, name )
       @open_messages = {}
     end
 
@@ -25,7 +25,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns nothing.
     def flush
-      @admin_client.flush(@name)
+      @client.flush(@name)
     end
 
 
@@ -33,17 +33,13 @@ class Qup::Adapter::Kestrel
     #
     # Returns an integer of the Queue depth
     def depth
-      stats = @admin_client.stat( @name )
-      return stats['items']
+      @client.stats['queues'][@name]['items']
     end
 
 
     # Internal: Put an item onto the Queue
     #
     # message - the data to put onto the queue.
-    #
-    # The 'message' that is passed in is wrapped in a Qup::Message before being
-    # stored.
     #
     # A user of the Qup API should use a Producer instance to put items onto the
     # queue.
@@ -62,16 +58,16 @@ class Qup::Adapter::Kestrel
     # A user of the Qup API should use a Consumer instance to retrieve items
     # from the Queue.
     #
-    # Returns a Message
+    # Returns a Message or nil if no message was on the queue
     def consume(&block)
-      data = @client.get( @name )
-      q_message = ::Qup::Message.new( data.object_id, data )
-      @open_messages[q_message.key] = q_message
+      q_item = @client.reserve( @name )
+      return nil unless q_item
+      q_message = ::Qup::Message.new( q_item.object_id, unmarshal_if_marshalled( q_item ))
+      @open_messages[q_message.key] = q_item
       if block_given? then
         yield_message( q_message, &block )
-      else
-        return q_message
       end
+      return q_message
     end
 
 
@@ -85,12 +81,21 @@ class Qup::Adapter::Kestrel
     def acknowledge( message )
       open_msg = @open_messages.delete( message.key )
       raise Qup::Error, "Message #{message.key} is not currently being consumed" unless open_msg
-      @client.close_last_transaction
+      @client.close( @name )
     end
 
     #######
     private
     #######
+
+    def unmarshal_if_marshalled( data )
+      if data[0].ord == 4 and data[1].ord == 8 then
+        Marshal::load( data )
+      else
+        data
+      end
+    end
+
 
     def yield_message( message, &block )
       yield message

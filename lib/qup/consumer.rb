@@ -38,5 +38,12 @@ module Qup
     def acknowledge( message )
       @queue.acknowledge( message )
     end
+
+    # Public: Return how many messages are on the queue for this consumer
+    #
+    # Returns an integer
+    def depth
+      @queue.depth
+    end
   end
 end

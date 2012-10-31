@@ -3,5 +3,6 @@ pkg/
 doc/
 coverage/
 coverage.info
+kestrel/
 *.gemspec
 Gemfile*

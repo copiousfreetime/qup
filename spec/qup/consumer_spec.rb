@@ -37,4 +37,11 @@ describe Qup::Consumer do
     queue.depth.should eq 0
   end
 
+  it "knows how deep the consumer's queue is" do
+    consumer.depth.should eq 1
+    consumer.consume do |msg|
+      msg.data.should eq 'consumption'
+    end
+    queue.depth.should eq 0
+  end
 end

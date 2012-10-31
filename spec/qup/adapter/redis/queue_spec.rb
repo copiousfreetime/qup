@@ -23,9 +23,9 @@ describe 'Qup::Adapter::Redis::Queue', :redis => true do
 
     describe "#destroy" do
       it "removes its name from the parent topic's subscriber set" do
-        redis.smembers("parent").should == ["test"]
+        redis.smembers("parent").should be == ["test"]
         queue.destroy
-        redis.smembers("parent").should == []
+        redis.smembers("parent").should be == []
       end
     end
 

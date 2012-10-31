@@ -78,4 +78,11 @@ describe Qup::Session do
       lambda { session.topic( 'boom' ) }.should raise_error( Qup::Session::ClosedError, /Session (.*) is closed/ )
     end
   end
+
+  describe '#options' do
+    it "holds the options that are used to initialize the session" do
+      s = Qup::Session.open( uri, { :the => 'Option' } )
+      s.options[:the].should == 'Option'
+    end
+  end
 end

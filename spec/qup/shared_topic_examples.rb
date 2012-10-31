@@ -53,5 +53,13 @@ shared_examples Qup::TopicAPI do
         msg.data.should eq 'hi all'
       end
     end
+
+    it "only receive a single message for a message containing newlines" do
+      p = @topic.publisher
+      p.publish( "one\nsingle\nmessage" )
+      @subs.each do |sub|
+        sub.depth.should eq 1
+      end
+    end
   end
 end

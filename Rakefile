@@ -19,8 +19,16 @@ namespace :develop do
     require 'rubygems/dependency_installer'
     installer = Gem::DependencyInstaller.new
 
+    # list these here instead of gem dependencies since there is not a way to
+    # sepcify ruby version specific dependencies
+    if RUBY_VERSION < "1.9.2"
+      Util.platform_gemspec.add_development_dependency( 'rcov', '~> 1.0.0' )
+    else
+      Util.platform_gemspec.add_development_dependency( 'simplecov', '~> 0.6.4' )
+    end
+
     puts "Installing gem depedencies needed for development"
-    This.gemspec.dependencies.each do |dep|
+    Util.platform_gemspec.dependencies.each do |dep|
       if dep.matching_specs.empty? then
         puts "Installing : #{dep}"
         installer.install dep
@@ -86,17 +94,30 @@ end
 # Coverage - optional code coverage, rcov for 1.8 and simplecov for 1.9, so
 #            for the moment only rcov is listed.
 #------------------------------------------------------------------------------
-begin
-  require 'rcov/rcovtask'
-  Rcov::RcovTask.new do |t|
-    t.libs      << 'spec'
-    t.pattern   = 'spec/**/*_spec.rb'
-    t.verbose   = true
-    t.rcov_opts << "-x ^/"           # remove all the global files
-    t.rcov_opts << "--sort coverage" # so we see the worst files at the top
+if RUBY_VERSION < "1.9.2"
+  begin
+    require 'rcov/rcovtask'
+    Rcov::RcovTask.new( :coverage ) do |t|
+      t.libs      << 'spec'
+      t.pattern   = 'spec/**/*_spec.rb'
+      t.verbose   = true
+      t.rcov_opts << "-x ^/"           # remove all the global files
+      t.rcov_opts << "--sort coverage" # so we see the worst files at the top
+    end
+  rescue LoadError
+    Util.task_warning( 'rcov' )
   end
-rescue LoadError
-  Util.task_warning( 'rcov' )
+else
+  begin
+    require 'simplecov'
+    desc "Run tests with code coverage"
+    task :coverage do
+      ENV['COVERAGE'] = 'true'
+      Rake::Task[:test].execute
+    end
+  rescue LoadError
+    Util.task_warning( 'simplecov' )
+  end
 end
 
 #------------------------------------------------------------------------------
@@ -135,7 +156,8 @@ end
 #------------------------------------------------------------------------------
 # Gem Specification
 #------------------------------------------------------------------------------
-This.gemspec = Gem::Specification.new do |spec|
+This.gemspec = Hash.new
+This.gemspec['ruby'] = Gem::Specification.new do |spec|
   spec.name        = This.name
   spec.version     = This.version
   spec.author      = This.author
@@ -154,16 +176,15 @@ This.gemspec = Gem::Specification.new do |spec|
                         "--markup", "tomdoc" ]
 
   # The Runtime Dependencies
-  spec.add_runtime_dependency( 'maildir', '~> 2.0.0' )
+  spec.add_runtime_dependency( 'maildir', '~> 2.1.0' )
 
   # Additional functionality if used
-  spec.add_development_dependency( 'kestrel-client'  , '~> 0.7.1' )
-  spec.add_development_dependency( 'redis'           , '~> 2.2.2' )
+  #spec.add_development_dependency( 'kjess' , '~> 0.0.1' )
+  spec.add_development_dependency( 'redis' , '~> 3.0.2' )
 
   # The Development Dependencies
   spec.add_development_dependency( 'rake'  , '~> 0.9.2.2')
-  spec.add_development_dependency( 'rcov'  , '~> 1.0.0'  )
-  spec.add_development_dependency( 'rspec' , '~> 2.8.0'  )
+  spec.add_development_dependency( 'rspec' , '~> 2.11.0' )
   spec.add_development_dependency( 'rdoc'  , '~> 3.12'   )
 
 end
@@ -175,7 +196,7 @@ This.gemspec_file = "#{This.name}.gemspec"
 desc "Build the #{This.name}.gemspec file"
 task :gemspec do
   File.open( This.gemspec_file, "wb+" ) do |f|
-    f.write This.gemspec.to_ruby
+    f.write Util.platform_gemspec.to_ruby
   end
 end
 
@@ -184,7 +205,7 @@ CLOBBER << This.gemspec_file
 
 # The standard gem packaging task, everyone has it.
 require 'rubygems/package_task'
-Gem::PackageTask.new( This.gemspec ) do
+Gem::PackageTask.new( Util.platform_gemspec ) do
   # nothing
 end
 
@@ -211,13 +232,13 @@ task :release_check do
   end
 end
 
-desc "Create tag v#{This.version}, build and push #{This.gemspec.full_name} to rubygems.org"
+desc "Create tag v#{This.version}, build and push #{Util.platform_gemspec.full_name} to rubygems.org"
 task :release => [ :release_check, 'manifest:check', :gem ] do
   sh "git commit --allow-empty -a -m 'Release #{This.version}'"
   sh "git tag -a -m 'v#{This.version}' v#{This.version}"
   sh "git push origin master"
   sh "git push origin v#{This.version}"
-  sh "gem push pkg/#{This.gemspec.full_name}.gem"
+  sh "gem push pkg/#{Util.platform_gemspec.full_name}.gem"
 end
 
 #------------------------------------------------------------------------------
@@ -265,16 +286,22 @@ BEGIN {
       abort "You need a Manifest.txt" unless File.readable?( "Manifest.txt" )
       File.readlines( "Manifest.txt" ).map { |l| l.strip }
     end
+
+    def self.platform_gemspec
+      This.gemspec[This.platform]
+    end
   end
 
   # Hold all the metadata about this project
   This = OpenStruct.new
+  This.platform = (RUBY_PLATFORM == "java") ? "java" : Gem::Platform::RUBY
+
   desc = Util.section_of( 'README.rdoc', 'DESCRIPTION')
   This.summary     = desc.first
   This.description = desc.join(" ").tr("\n", ' ').gsub(/[{}]/,'').gsub(/\[[^\]]+\]/,'') # strip rdoc
 
 
-  This.exclude_from_manifest = %r/tmp$|\.(git|DS_Store)|^(doc|coverage|pkg)|\.gemspec$|\.swp$|\.jar|\.rvmrc$|~$/
+  This.exclude_from_manifest = %r/tmp$|\.(git|DS_Store)|^(doc|coverage|pkg)|\.gemspec$|\.swp$|\.jar|\.rvmrc$|^kestrel|~$/
   This.manifest = Util.read_manifest
 
 }

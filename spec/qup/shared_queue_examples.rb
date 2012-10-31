@@ -20,10 +20,17 @@ shared_examples Qup::QueueAPI do
     queue.name.should eq 'foo'
   end
 
-  it "#produce" do
-    queue.depth.should eq 0
-    queue.produce( "a new message" )
-    queue.depth.should eq 1
+  describe "#produce" do
+    it "produces an item on the queue" do
+      queue.depth.should eq 0
+      queue.produce( "a new message" )
+      queue.depth.should eq 1
+    end
+
+    it "does not create multiple messages for newlines" do
+      queue.produce( "one\nsingle\nmessage" )
+      queue.depth.should eq 1
+    end
   end
 
   it "#flush" do
@@ -48,6 +55,11 @@ shared_examples Qup::QueueAPI do
       queue.consume do |msg|
         msg.data.should eq 'consumeable message'
       end
+    end
+
+    it 'returns nil if the queue is empty (it is non-blocking)' do
+      queue.consume
+      queue.consume.should == nil
     end
   end
 
