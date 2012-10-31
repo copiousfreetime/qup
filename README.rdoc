@@ -99,7 +99,7 @@ install additional gems. At the current moment, these are the supported
 messaging backends.
 
 * Qup::Adapter::Maildir - built in and uses the 'maildir' gem
-* Qup::Adapter::Kestrel - uses the 'kestrel-client' gem
+* Qup::Adapter::Kestrel - uses the 'kjess' gem
 * Qup::Adapter::Redis   - uses the 'redis' gem
 
 == INSTALL
@@ -124,7 +124,7 @@ Other tasks are viewable with
 
 To run the Kestrel tests you will need:
 
-* gem install kestrel-client
+* gem install kjess
 * A Kestrel server running on <tt>localhost:22133</tt>
 
 You can download Kestrel from http://robey.github.com/kestrel/ and then run the
