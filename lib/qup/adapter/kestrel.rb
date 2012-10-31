@@ -16,8 +16,8 @@ class Qup::Adapter
       @uri        = uri
       @host       = @uri.host
       @port       = @uri.port.to_i
-      @options    = options
-      @client     = KJess::Client.new( :host => @host, :port => @port )
+      @client_options = options.merge( :host => @host, :port => @port )
+      @client     = KJess::Client.new( @client_options )
       @client.ping
       @closed     = false
     end
