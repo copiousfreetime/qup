@@ -179,7 +179,7 @@ This.gemspec['ruby'] = Gem::Specification.new do |spec|
   spec.add_runtime_dependency( 'maildir', '~> 2.1.0' )
 
   # Additional functionality if used
-  #spec.add_development_dependency( 'kjess' , '~> 0.0.1' )
+  spec.add_development_dependency( 'kjess' , '~> 1.0.0' )
   spec.add_development_dependency( 'redis' , '~> 3.0.2' )
 
   # The Development Dependencies
