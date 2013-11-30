@@ -11,7 +11,7 @@ shared_context "Qup::Topic" do
   end
 
   after do
-    @topic.destroy
+    #@topic.destroy
   end
 end
 
@@ -31,8 +31,10 @@ shared_examples Qup::TopicAPI do
   describe "subscribers" do
     before do
       @subs = []
+      @t2 = adapter.topic( 'topic' )
+
       3.times do |x|
-        @subs << @topic.subscriber( "sub-#{x}")
+        @subs << @t2.subscriber( "sub-#{x}")
       end
     end
 
@@ -41,6 +43,7 @@ shared_examples Qup::TopicAPI do
     end
 
     it "are counted" do
+      @topic.subscriber_count.should eq @t2.subscriber_count
       @topic.subscriber_count.should eq 3
     end
 
