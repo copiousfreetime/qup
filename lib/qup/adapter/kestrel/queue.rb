@@ -28,6 +28,12 @@ class Qup::Adapter::Kestrel
       @client.flush(@name)
     end
 
+    # Internal: Remove the Queue if possible
+    #
+    # Returns nothing
+    def destroy
+      @client.delete(@name)
+    end
 
     # Internal: return the number of Messages on the Queue
     #

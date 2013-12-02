@@ -32,6 +32,16 @@ class Qup::Adapter::Kestrel
       ::Qup::Subscriber.new( self, subscriber_queue( name )  )
     end
 
+    # Internal: Destroy the topic
+    #
+    # Returns nothing
+    def destroy
+      subscribers.each do |name, sub|
+        sub.destroy
+      end
+      @client.delete( @name )
+    end
+
 
     # Internal: Return the number of Subscribers to this Topic
     #
@@ -43,15 +53,7 @@ class Qup::Adapter::Kestrel
     #
     # Returns integer
     def subscriber_count
-      c = Set.new
-
-      stats['queues'].keys.each do |k|
-        next unless k =~ %r{\A#{@name}\+}
-        parts = k.split("+")
-        c << parts[1]
-      end
-
-      return c.size
+      subscriber_names.size
     end
 
     # Internal: Publish a Message to all the Subscribers
@@ -66,6 +68,26 @@ class Qup::Adapter::Kestrel
     #######
     private
     #######
+ 
+    def subscribers
+      subs = {}
+      subscriber_names.each do |sub_name|
+        subs[sub_name] = subscriber_queue( sub_name )
+      end
+      return subs
+    end 
+
+    def subscriber_names
+      names = []
+
+      stats['queues'].keys.each do |k|
+        next unless k =~ %r{\A#{@name}\+}
+        parts = k.split("+")
+        names << parts[1]
+      end
+
+      return names
+    end 
 
     def subscriber_queue( sub_name )
       sname = subscriber_queue_name( sub_name )
