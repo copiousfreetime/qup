@@ -2,6 +2,7 @@
 
 ## Version 1.4.1 - 2013-12-xx
 
+* update gem dependencies
 * fix maildir adapter bug where subscribers in the same process where not loaded
 * fix redis adapter bug where subscribers where not deleted if the topic was 
   removed.
