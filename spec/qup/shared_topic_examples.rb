@@ -11,7 +11,7 @@ shared_context "Qup::Topic" do
   end
 
   after do
-    #@topic.destroy
+    @topic.destroy
   end
 end
 
@@ -31,20 +31,31 @@ shared_examples Qup::TopicAPI do
   describe "subscribers" do
     before do
       @subs = []
-      @t2 = adapter.topic( 'topic' )
+      @topic2 = adapter.topic( 'topic' )
 
       3.times do |x|
-        @subs << @t2.subscriber( "sub-#{x}")
+        @subs << @topic2.subscriber( "sub-#{x}")
       end
     end
 
     after do
-      @subs.each { |s| s.unsubscribe }
+      @topic2.destroy
+      @topic.subscriber_count.should eq 0
     end
 
-    it "are counted" do
-      @topic.subscriber_count.should eq @t2.subscriber_count
-      @topic.subscriber_count.should eq 3
+    it "updates the publisher with the number of subscribers" do
+      start_count   = @topic.subscriber_count
+      @topic2.subscriber_count.should eq start_count
+      current_count = start_count
+
+      3.times do |x|
+        current_count += 1
+        @topic2.subscriber( "sub2-#{x}" )
+        puts "@topic subscriber_count  =>  #{@topic.subscriber_count}"
+        puts "@topic2 subscriber count =>  #{@topic2.subscriber_count}"
+        @topic.subscriber_count.should eq current_count
+        @topic2.subscriber_count.should eq current_count
+      end
     end
 
     it "each receives a copy of the message" do

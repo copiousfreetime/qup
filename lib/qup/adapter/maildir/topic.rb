@@ -20,11 +20,9 @@ class Qup::Adapter::Maildir
       @root_path   = ::Pathname.new( root_path )
       @name        = name
       @topic_path  = @root_path + @name
-      @subscribers = Hash.new
 
       FileUtils.mkdir_p( @topic_path )
       @topic_path_mtime = @topic_path.mtime
-      reload_subscribers
     end
 
     # Internal: Destroy the Topic
@@ -33,7 +31,7 @@ class Qup::Adapter::Maildir
     #
     # Returns nothing.
     def destroy
-      @topic_path.rmtree
+      @topic_path.rmtree if @topic_path.directory?
     end
 
     # Internal: Creates a Publisher for the Topic
@@ -81,24 +79,20 @@ class Qup::Adapter::Maildir
     #######
    
     def subscribers
-      if (@subscribers.empty?) || (@topic_path.mtime > @topic_path_mtime) then
-        @subscribers.clear
+      subs = {}
+      if @topic_path.directory? then
         @topic_path.each_child do |child|
-          sub_queue( child.basename )
+          if child.directory?
+            name = child.basename
+            subs[name] = sub_queue( name )
+          end
         end
       end
-      return @subscribers
+      return subs
     end 
 
-    def reload_subscribers
-      @topic_path.children( false ) do |child|
-        sub_queue( child.basename ) if child.directory?
-      end
-    end
-
-
     def sub_queue( name )
-      @subscribers[name] ||= ::Qup::Adapter::Maildir::Queue.new( @topic_path, name )
+      ::Qup::Adapter::Maildir::Queue.new( @topic_path, name )
     end
   end
 end
