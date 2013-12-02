@@ -51,8 +51,6 @@ shared_examples Qup::TopicAPI do
       3.times do |x|
         current_count += 1
         @topic2.subscriber( "sub2-#{x}" )
-        puts "@topic subscriber_count  =>  #{@topic.subscriber_count}"
-        puts "@topic2 subscriber count =>  #{@topic2.subscriber_count}"
         @topic.subscriber_count.should eq current_count
         @topic2.subscriber_count.should eq current_count
       end
