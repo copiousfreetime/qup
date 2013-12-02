@@ -1,9 +1,11 @@
 # Changelog
 
-## Version 1.4.1 - 2013-xx-xx
+## Version 1.4.1 - 2013-12-xx
 
 * fix maildir adapter bug where subscribers in the same process where not loaded
 * fix redis adapter bug where subscribers where not deleted if the topic was 
+  removed.
+* fix kestrel adapter bug where subscribers where not deleted if the topic was
   removed.
 
 ## Version 1.4.0 - 2012-10-31
