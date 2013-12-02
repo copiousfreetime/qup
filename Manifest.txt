@@ -1,9 +1,11 @@
 .autotest
 .gemtest
-ADAPTER_API.rdoc
-HISTORY.rdoc
+ADAPTER_API.md
+CONTRIBUTING.md
+HISTORY.md
+LICENSE
 Manifest.txt
-README.rdoc
+README.md
 Rakefile
 lib/qup.rb
 lib/qup/adapter.rb
@@ -54,3 +56,5 @@ spec/qup/shared_topic_examples.rb
 spec/qup/topic_api_spec.rb
 spec/qup_spec.rb
 spec/spec_helper.rb
+tasks/default.rake
+tasks/this.rb
