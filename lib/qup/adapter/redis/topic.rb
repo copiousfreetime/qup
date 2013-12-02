@@ -33,6 +33,15 @@ class Qup::Adapter::Redis
       ::Qup::Subscriber.new( self, queue )
     end
 
+    # Internal: Destroy the topic and all of its subscribers
+    #
+    # Returns nothing
+    def destroy
+      subscribers.each do |name, subscriber|
+        subscriber.destroy
+      end
+    end
+
     # Internal: Return the number of Subscribers to this Topic
     #
     # Returns integer
@@ -46,8 +55,8 @@ class Qup::Adapter::Redis
     #
     # Returns nothing
     def publish( message )
-      subscribers.each do |subscriber|
-        @client.lpush subscriber, message
+      subscribers.each do |name, subscriber|
+        subscriber.produce( message )
       end
     end
 
@@ -55,12 +64,22 @@ class Qup::Adapter::Redis
     private
     #######
 
-    # Private: retrieve the current list of subscribers
+    # Private: retrieve the current list of subscriber names
     #
     # Returns an array of subscriber queue names
-    def subscribers
+    def subscriber_names
       @client.smembers @name
     end
 
+    # Private: return the current list of subscribers
+    #
+    # Return a Hash of subscriber names and queues
+    def subscribers
+      subs = {}
+      subscriber_names.each do |sname|
+        subs[sname] = ::Qup::Adapter::Redis::Queue.new(@uri, sname, @name)
+      end
+      return subs
+    end
   end
 end

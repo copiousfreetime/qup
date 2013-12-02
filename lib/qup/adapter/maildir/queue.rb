@@ -21,6 +21,8 @@ class Qup::Adapter::Maildir
       @name       = name
       @queue_path = @root_path + @name
       @maildir    = ::Maildir.new( @queue_path, true )
+      # FIXME: this is a -w for Maildir issue, remove when fixed upstream
+      @maildir.serializer = ::Maildir::Serializer::Base.new
     end
 
 

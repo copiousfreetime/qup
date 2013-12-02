@@ -20,9 +20,9 @@ class Qup::Adapter::Maildir
       @root_path   = ::Pathname.new( root_path )
       @name        = name
       @topic_path  = @root_path + @name
-      @subscribers = Hash.new
 
       FileUtils.mkdir_p( @topic_path )
+      @topic_path_mtime = @topic_path.mtime
     end
 
     # Internal: Destroy the Topic
@@ -31,7 +31,7 @@ class Qup::Adapter::Maildir
     #
     # Returns nothing.
     def destroy
-      @topic_path.rmtree
+      @topic_path.rmtree if @topic_path.directory?
     end
 
     # Internal: Creates a Publisher for the Topic
@@ -60,7 +60,7 @@ class Qup::Adapter::Maildir
     #
     # Returns integer
     def subscriber_count
-      @subscribers.size
+      subscribers.size
     end
 
     # Internal: Publish a Message to all the Subscribers
@@ -69,7 +69,7 @@ class Qup::Adapter::Maildir
     #
     # Returns nothing
     def publish( message )
-      @subscribers.each do |name, sub|
+      subscribers.each do |name, sub|
         sub.produce( message )
       end
     end
@@ -77,9 +77,22 @@ class Qup::Adapter::Maildir
     #######
     private
     #######
+   
+    def subscribers
+      subs = {}
+      if @topic_path.directory? then
+        @topic_path.each_child do |child|
+          if child.directory?
+            name = child.basename
+            subs[name] = sub_queue( name )
+          end
+        end
+      end
+      return subs
+    end 
 
     def sub_queue( name )
-      @subscribers[name] ||= ::Qup::Adapter::Maildir::Queue.new( @topic_path, name )
+      ::Qup::Adapter::Maildir::Queue.new( @topic_path, name )
     end
   end
 end

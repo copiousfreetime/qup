@@ -19,11 +19,13 @@ shared_examples Qup::Adapter do
     q = adapter.queue( 'q' )
     q.should be_kind_of( Qup::QueueAPI )
     q.name.should eq 'q'
+    q.destroy
   end
 
   it 'can create a QueueAPI-like object' do
     t = adapter.topic( 't' )
     t.should be_kind_of( Qup::TopicAPI )
     t.name.should eq 't'
+    t.destroy
   end
 end
