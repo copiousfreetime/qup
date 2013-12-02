@@ -11,13 +11,13 @@ This.ruby_gemspec do |spec|
   spec.add_runtime_dependency( 'maildir', '~> 2.1.0' )
 
   # Additional functionality if used
-  spec.add_development_dependency( 'kjess' , '~> 1.0.0' )
-  spec.add_development_dependency( 'redis' , '~> 3.0.2' )
+  spec.add_development_dependency( 'kjess' , '~> 1.2' )
+  spec.add_development_dependency( 'redis' , '~> 3.0' )
 
   # The Development Dependencies
-  spec.add_development_dependency( 'rake'  , '~> 0.9.2.2')
-  spec.add_development_dependency( 'rspec' , '~> 2.13.0' )
-  spec.add_development_dependency( 'rdoc'  , '~> 3.12'   )
+  spec.add_development_dependency( 'rake'  , '~> 10.1.0' )
+  spec.add_development_dependency( 'rspec' , '~> 2.14.0' )
+  spec.add_development_dependency( 'rdoc'  , '~> 4.0'    )
 
 end
 
