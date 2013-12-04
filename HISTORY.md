@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.4.2 - 2013-12-04
+
+* 1.8.7 compatibility
+
 ## Version 1.4.1 - 2013-12-02
 
 * update gem dependencies
