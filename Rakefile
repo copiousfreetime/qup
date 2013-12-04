@@ -1,4 +1,5 @@
 # vim: syntax=ruby
+require 'rubygems'
 load 'tasks/this.rb'
 
 This.name     = "qup"

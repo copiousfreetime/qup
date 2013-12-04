@@ -81,7 +81,7 @@ class Qup::Adapter::Maildir
     def subscribers
       subs = {}
       if @topic_path.directory? then
-        @topic_path.each_child do |child|
+        @topic_path.children.each do |child|
           if child.directory?
             name = child.basename
             subs[name] = sub_queue( name )
