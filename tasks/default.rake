@@ -58,7 +58,7 @@ begin
   end
   task :default => :test
 rescue LoadError
-  Util.task_warning( 'test' )
+  This.task_warning( 'test' )
 end
 
 
