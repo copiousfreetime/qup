@@ -67,7 +67,7 @@ class Qup::Adapter::Kestrel
     # Returns a Message or nil if no message was on the queue
     def consume(&block)
       q_item = @client.reserve( @name )
-      return nil unless q_item
+      return nil unless valid(q_item)
       q_message = ::Qup::Message.new( q_item.object_id, unmarshal_if_marshalled( q_item ))
       @open_messages[q_message.key] = q_item
       if block_given? then
@@ -93,6 +93,10 @@ class Qup::Adapter::Kestrel
     #######
     private
     #######
+
+    def valid(data)
+      return data && data[0] && data[1]
+    end
 
     def unmarshal_if_marshalled( data )
       if data[0].ord == 4 and data[1].ord == 8 then
