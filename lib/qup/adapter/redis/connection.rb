@@ -13,9 +13,8 @@ class Qup::Adapter::Redis
     # name - the String name of the Connection
     #
     # Returns a new Connection.
-    def initialize( uri, name )
-      @uri    = uri
-      @client = Redis.new :host => @uri.host, :port => @uri.port
+    def initialize( client, name )
+      @client = client
       @name   = name
     end
 
