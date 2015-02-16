@@ -29,7 +29,7 @@ class Qup::Adapter::Redis
     def subscriber(name)
       subscriber_name = "#{@name}.#{name}"
       @client.sadd @name, subscriber_name
-      queue = ::Qup::Adapter::Redis::Queue.new(@uri, subscriber_name, @name)
+      queue = ::Qup::Adapter::Redis::Queue.new(@client, subscriber_name, @name)
       ::Qup::Subscriber.new( self, queue )
     end
 
@@ -77,7 +77,7 @@ class Qup::Adapter::Redis
     def subscribers
       subs = {}
       subscriber_names.each do |sname|
-        subs[sname] = ::Qup::Adapter::Redis::Queue.new(@uri, sname, @name)
+        subs[sname] = ::Qup::Adapter::Redis::Queue.new(@client, sname, @name)
       end
       return subs
     end

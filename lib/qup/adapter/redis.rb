@@ -15,6 +15,7 @@ class Qup::Adapter
     def initialize( uri, options = {} )
       @uri        = uri
       @options    = options
+      @client     = ::Redis.new host: @uri.host, port: @uri.port
       @closed     = false
     end
 
@@ -24,7 +25,7 @@ class Qup::Adapter
     #
     # Returns a Qup::Queue
     def queue( name )
-      Qup::Adapter::Redis::Queue.new( @uri, name )
+      Qup::Adapter::Redis::Queue.new( @client, name )
     end
 
     # Internal: Create a new Topic from this Adapter
@@ -33,7 +34,7 @@ class Qup::Adapter
     #
     # Returns a Qup::Topic
     def topic( name )
-      Qup::Adapter::Redis::Topic.new( @uri, name )
+      Qup::Adapter::Redis::Topic.new( @client, name )
     end
 
     # Internal: Close the Redis adapter
