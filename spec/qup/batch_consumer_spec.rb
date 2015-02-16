@@ -23,7 +23,7 @@ module Qup
           :session_options => session_options,
           :queue_uri => "maildir://#{Dir.mktmpdir}"
         })
-        batch_consumer.session.options.should == session_options
+        expect( batch_consumer.session.options ).to eq session_options
       end
     end
 
@@ -81,7 +81,7 @@ module Qup
         })
 
         batch_consumer.run
-        client.messages.should == ["A", "B"]
+        expect( client.messages ).to eq ["A", "B"]
       end
 
       it "returns when max_age is met" do
@@ -112,7 +112,7 @@ module Qup
         })
 
         batch_consumer.run
-        client.messages.should == ["A"]
+        expect( client.messages ).to eq ["A"]
 
       end
 
@@ -129,9 +129,9 @@ module Qup
           :queue_name => queue_name
         })
 
-        client.should_receive(:setup).once.ordered
-        client.should_receive(:process).once.ordered
-        client.should_receive(:teardown).once.ordered
+        expect( client ).to receive(:setup).once.ordered
+        expect( client ).to receive(:process).once.ordered
+        expect( client ).to receive(:teardown).once.ordered
 
         batch_consumer.run
       end

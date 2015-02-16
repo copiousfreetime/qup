@@ -11,8 +11,8 @@ describe Qup::Producer do
   end
 
   it "produces items onto the queue" do
-    queue.depth.should eq 0
+    expect( queue.depth ).to eq 0
     producer.produce( 'production' )
-    queue.depth.should eq 1
+    expect( queue.depth ).to eq 1
   end
 end

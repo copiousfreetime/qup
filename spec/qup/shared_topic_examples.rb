@@ -19,12 +19,12 @@ end
 shared_examples Qup::TopicAPI do
 
   it "has a name" do
-    @topic.name.should == 'topic'
+    expect( @topic.name ).to eq 'topic'
   end
 
   it "creates publisher" do
     p = @topic.publisher
-    p.topic.should eq @topic
+    expect( p.topic ).to eq @topic
   end
 
 
@@ -40,19 +40,19 @@ shared_examples Qup::TopicAPI do
 
     after do
       @topic2.destroy
-      @topic.subscriber_count.should eq 0
+      expect( @topic.subscriber_count ).to eq 0
     end
 
     it "updates the publisher with the number of subscribers" do
       start_count   = @topic.subscriber_count
-      @topic2.subscriber_count.should eq start_count
+      expect( @topic2.subscriber_count ).to eq start_count
       current_count = start_count
 
       3.times do |x|
         current_count += 1
         @topic2.subscriber( "sub2-#{x}" )
-        @topic.subscriber_count.should eq current_count
-        @topic2.subscriber_count.should eq current_count
+        expect( @topic.subscriber_count ).to eq current_count
+        expect( @topic2.subscriber_count ).to eq current_count
       end
     end
 
@@ -62,7 +62,7 @@ shared_examples Qup::TopicAPI do
 
       @subs.each do |sub|
         msg = sub.consume
-        msg.data.should eq 'hi all'
+        expect( msg.data ).to eq 'hi all'
       end
     end
 
@@ -70,7 +70,7 @@ shared_examples Qup::TopicAPI do
       p = @topic.publisher
       p.publish( "one\nsingle\nmessage" )
       @subs.each do |sub|
-        sub.depth.should eq 1
+        expect( sub.depth ).to eq 1
       end
     end
   end
