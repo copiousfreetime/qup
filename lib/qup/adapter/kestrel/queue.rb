@@ -94,6 +94,8 @@ class Qup::Adapter::Kestrel
     private
     #######
 
+    # Make sure that we have data, and at least 2 bytes to check for Marshaled
+    # data.
     def valid(data)
       return data && data[0] && data[1]
     end
