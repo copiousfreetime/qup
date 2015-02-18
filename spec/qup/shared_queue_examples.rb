@@ -17,67 +17,67 @@ end
 shared_examples Qup::QueueAPI do
 
   it "has a name" do
-    queue.name.should eq 'foo'
+    expect( queue.name ).to eq 'foo'
   end
 
   describe "#produce" do
     it "produces an item on the queue" do
-      queue.depth.should eq 0
+      expect( queue.depth ).to eq 0
       queue.produce( "a new message" )
-      queue.depth.should eq 1
+      expect( queue.depth ).to eq 1
     end
 
     it "does not create multiple messages for newlines" do
       queue.produce( "one\nsingle\nmessage" )
-      queue.depth.should eq 1
+      expect( queue.depth ).to eq 1
     end
   end
 
   it "#flush" do
     10.times { |x| queue.produce( "message #{x}" ) }
-    queue.depth.should eq 10
+    expect(queue.depth).to eq 10
     queue.flush
-    queue.depth.should eq 0
+    expect(queue.depth).to eq 0
   end
 
   describe '#consume' do
     before do
       queue.produce( "consumeable message" )
-      queue.depth.should eq 1
+      expect(queue.depth).to eq 1
     end
 
     it 'normally' do
       msg = queue.consume
-      msg.data.should eq "consumeable message"
+      expect( msg.data ).to eq "consumeable message"
     end
 
     it 'with block it auto acknowledges' do
       queue.consume do |msg|
-        msg.data.should eq 'consumeable message'
+        expect( msg.data ).to eq 'consumeable message'
       end
     end
 
     it 'returns nil if the queue is empty (it is non-blocking)' do
       queue.consume
-      queue.consume.should == nil
+      expect( queue.consume).to be_nil
     end
   end
 
   describe "#acknowledge" do
     it "acks a message" do
       queue.produce( "acknowledgeable message" )
-      queue.depth.should eq 1
+      expect( queue.depth ).to eq 1
 
       msg = queue.consume
-      msg.data.should eq "acknowledgeable message"
+      expect( msg.data ).to eq "acknowledgeable message"
 
       queue.acknowledge( msg )
-      queue.depth.should eq 0
+      expect( queue.depth ).to eq 0
     end
 
     it "raises an error if you attempt to to acknowledge an unconsumed message" do
       msg = queue.produce( 'unconsumed' )
-      lambda { queue.acknowledge( msg ) }.should raise_error(Qup::Error)
+      expect { queue.acknowledge( msg ) }.to raise_error(Qup::Error)
     end
   end
 end

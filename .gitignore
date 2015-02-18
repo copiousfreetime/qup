@@ -4,5 +4,8 @@ doc/
 coverage/
 coverage.info
 kestrel/
-*.gemspec
-Gemfile*
+tags
+*.swp
+# artifact of testing with redis
+*.rdb
+Gemfile.lock

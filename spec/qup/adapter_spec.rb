@@ -6,7 +6,7 @@ end
 
 describe 'Adapter Registration' do
   it 'registers an adapter' do
-    Qup::Adapters['quptest'].should eq Qup::AdapterTest
+    expect( Qup::Adapters['quptest'] ).to eq Qup::AdapterTest
   end
 end
 
@@ -15,13 +15,17 @@ describe "Not Implementing the Adapter API" do
 
   %w[ close closed? ].each do |method|
     it "##{method} kaboom!" do
-      lambda { api.send( method ) }.should raise_error( NotImplementedError, "please implement '#{method}'" )
+      expect {
+        api.send( method )
+        }.to raise_error( NotImplementedError, "please implement '#{method}'" )
     end
   end
 
   %w[ queue topic ].each do |method|
     it "##{method} kaboom!" do
-      lambda { api.send( method, 'foo' ) }.should raise_error( NotImplementedError, "please implement '#{method}'" )
+      expect {
+        api.send( method, 'foo' )
+        }.to raise_error( NotImplementedError, "please implement '#{method}'" )
     end
   end
 
