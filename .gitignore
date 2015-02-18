@@ -4,5 +4,5 @@ doc/
 coverage/
 coverage.info
 kestrel/
-*.gemspec
-Gemfile*
+tags
+*.swp
