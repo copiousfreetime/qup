@@ -9,7 +9,7 @@ This.homepage = "http://github.com/copiousfreetime/#{ This.name }"
 
 This.ruby_gemspec do |spec|
   # The Runtime Dependencies
-  spec.add_runtime_dependency( 'maildir', '~> 2.2' )
+  spec.add_runtime_dependency( 'maildir', '~> 2.1' )
 
   # Additional functionality if used
   # FIXME: remove completely at some point
