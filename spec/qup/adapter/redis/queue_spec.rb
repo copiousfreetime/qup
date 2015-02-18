@@ -9,7 +9,7 @@ describe 'Qup::Adapter::Redis::Queue', :redis => true do
 
   context "when initialized with a parent topic's name" do
     let(:redis) { Redis.new :host => uri.host, :port => uri.port }
-    let(:queue) { Qup::Adapter::Redis::Queue.new(uri, "test", "parent") }
+    let(:queue) { Qup::Adapter::Redis::Queue.new(redis, "test", "parent") }
 
     before do
       redis.del "parent"
