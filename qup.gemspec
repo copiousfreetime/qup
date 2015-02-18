@@ -27,14 +27,14 @@ Gem::Specification.new do |s|
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<maildir>, ["~> 2.2"])
+      s.add_runtime_dependency(%q<maildir>, ["~> 2.1.0"])
       s.add_development_dependency(%q<redis>, ["~> 3.0"])
       s.add_development_dependency(%q<simplecov>, ["~> 0.9"])
       s.add_development_dependency(%q<rake>, ["~> 10.4"])
       s.add_development_dependency(%q<rspec>, ["~> 3.2"])
       s.add_development_dependency(%q<rdoc>, ["~> 4.0"])
     else
-      s.add_dependency(%q<maildir>, ["~> 2.2"])
+      s.add_dependency(%q<maildir>, ["~> 2.1.0"])
       s.add_dependency(%q<redis>, ["~> 3.0"])
       s.add_dependency(%q<simplecov>, ["~> 0.9"])
       s.add_dependency(%q<rake>, ["~> 10.4"])
@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rdoc>, ["~> 4.0"])
     end
   else
-    s.add_dependency(%q<maildir>, ["~> 2.2"])
+    s.add_dependency(%q<maildir>, ["~> 2.1.0"])
     s.add_dependency(%q<redis>, ["~> 3.0"])
     s.add_dependency(%q<simplecov>, ["~> 0.9"])
     s.add_dependency(%q<rake>, ["~> 10.4"])

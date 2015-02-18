@@ -9,7 +9,9 @@ This.homepage = "http://github.com/copiousfreetime/#{ This.name }"
 
 This.ruby_gemspec do |spec|
   # The Runtime Dependencies
-  spec.add_runtime_dependency( 'maildir', '~> 2.1' )
+  # FIXME: when jruby has a 2.0 mode update this to 2.2 In the meantime
+  # there is no real update to maildir other than a new requirement for ruby 2.0
+  spec.add_runtime_dependency( 'maildir', '~> 2.1.0' )
 
   # Additional functionality if used
   # FIXME: remove completely at some point
