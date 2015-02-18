@@ -6,3 +6,5 @@ coverage.info
 kestrel/
 tags
 *.swp
+# artifact of testing with redis
+*.rdb
