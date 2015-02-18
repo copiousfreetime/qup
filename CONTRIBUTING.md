@@ -37,6 +37,7 @@ easiest way to contribute.
 
 * [Jeremy Hinegardner](https://github.com/copiousfreetime)
 * [Kevin Barnes](https://github.com/vinbarnes)
+* [Bruno Antunes](https://github.com/sardaukar)
 
 [GitHub Account]: https://github.com/signup/free "GitHub Signup"
 [GitHub Issues]:  https://github.com/copiousfreetime/fixme/issues "Fixme Issues"
