@@ -2,7 +2,7 @@ class Qup::Adapter::Redis
   #
   # Internal: The Common base class for Redis Topic and Queue
   #
-  class Connection
+  class Destination
 
     # Public: the name of the Queue or Topic
     attr_reader :name
@@ -16,15 +16,15 @@ class Qup::Adapter::Redis
     def initialize( client, name )
       @client = client
       @name   = name
+      ping
     end
 
-    # Public: destroy the connection
+    # Internal: Make sure the Topic or Queue exists
     #
-    # Closes the redis client connection.
-    #
-    # Returns nothing.
-    def destroy
-      @client.client.disconnect
+    # Returns nothing
+    def ping
+      @client.ping
+      return true
     end
 
   end

@@ -1,4 +1,4 @@
-require 'qup/adapter/redis/connection'
+require 'qup/adapter/redis/destination'
 
 class Qup::Adapter::Redis
   #
@@ -8,7 +8,7 @@ class Qup::Adapter::Redis
   # rather it guarantees durability of all published messages by using
   # sub-queues internally to deliver messages to subscribers.
   #
-  class Topic < Connection
+  class Topic < Destination
     include Qup::TopicAPI
 
     # Internal: Creates a Publisher for the Topic

@@ -1,10 +1,10 @@
-require 'qup/adapter/redis/connection'
+require 'qup/adapter/redis/destination'
 
 class Qup::Adapter::Redis
   #
   # Internal: The Qup implementation for a Redis Queue
   #
-  class Queue < Connection
+  class Queue < Destination
     include Qup::QueueAPI
 
     # Internal: create a new Queue
