@@ -16,6 +16,7 @@ class Qup::Adapter
       @uri        = uri
       @options    = options
       @client     = ::Redis.new host: @uri.host, port: @uri.port
+      @client.ping
       @closed     = false
     end
 
@@ -41,6 +42,7 @@ class Qup::Adapter
     #
     # Return nothing
     def close
+      @client.disconnect!
       @closed = true
     end
 
@@ -48,7 +50,7 @@ class Qup::Adapter
     #
     # Returns true or false
     def closed?
-      @closed
+      not @client.connected?
     end
   end
 end
