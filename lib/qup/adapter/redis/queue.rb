@@ -9,13 +9,13 @@ class Qup::Adapter::Redis
 
     # Internal: create a new Queue
     #
-    # uri        - the connection uri for the Redis Client
+    # client     - the Redis client
     # name       - the String name of the Queue
     # topic_name - (optional) the String name of a parent topic
     #
     # Returns a new Queue.
-    def initialize( uri, name, topic_name = nil )
-      super uri, name
+    def initialize( client, name, topic_name = nil )
+      super( client, name )
       @topic_name = topic_name
       @open_messages = {}
     end

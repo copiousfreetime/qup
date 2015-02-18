@@ -6,26 +6,26 @@ require 'spec_helper'
 #
 shared_examples Qup::Adapter do
   it 'is registered as an adapter' do
-    Qup::Adapters[uri.scheme].should eq adapter.class
+    expect( Qup::Adapters[uri.scheme] ).to eq adapter.class
   end
 
   it 'can be closed' do
-    adapter.closed?.should be_false
+    expect( adapter.closed? ).to be_falsey
     adapter.close
-    adapter.closed?.should be_true
+    expect( adapter.closed? ).to be_truthy
   end
 
   it 'can create a QueueAPI-like object' do
     q = adapter.queue( 'q' )
-    q.should be_kind_of( Qup::QueueAPI )
-    q.name.should eq 'q'
+    expect( q ).to be_kind_of( Qup::QueueAPI )
+    expect( q.name ).to eq 'q'
     q.destroy
   end
 
   it 'can create a QueueAPI-like object' do
     t = adapter.topic( 't' )
-    t.should be_kind_of( Qup::TopicAPI )
-    t.name.should eq 't'
+    expect( t ).to be_kind_of( Qup::TopicAPI )
+    expect( t.name ).to eq 't'
     t.destroy
   end
 end

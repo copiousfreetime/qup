@@ -21,9 +21,9 @@ describe 'Qup::Adapter::Redis::Topic', :redis => true  do
     end
 
     it "unregisters itself from the Topic when unsubscribed" do
-      lambda do
+      expect {
         subscriber.unsubscribe
-      end.should change(topic, :subscriber_count).by(-1)
+        }.to change(topic, :subscriber_count).by(-1)
     end
   end
 end
