@@ -12,7 +12,8 @@ This.ruby_gemspec do |spec|
   spec.add_runtime_dependency( 'maildir', '~> 2.2' )
 
   # Additional functionality if used
-  spec.add_development_dependency( 'kjess' , '~> 1.2' )
+  # FIXME: remove completely at some point
+  # spec.add_development_dependency( 'kjess' , '~> 1.2' )
   spec.add_development_dependency( 'redis' , '~> 3.0' )
 
   # The Development Dependencies
