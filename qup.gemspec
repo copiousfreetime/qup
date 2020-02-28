@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<kjess>, ["~> 1.2"])
       s.add_development_dependency(%q<redis>, ["~> 3.0"])
       s.add_development_dependency(%q<simplecov>, ["~> 0.9"])
-      s.add_development_dependency(%q<rake>, ["~> 10.4"])
+      s.add_development_dependency(%q<rake>, "~> 12.3")
       s.add_development_dependency(%q<rspec>, ["~> 3.2"])
       s.add_development_dependency(%q<rdoc>, ["~> 4.0"])
     else
@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<kjess>, ["~> 1.2"])
       s.add_dependency(%q<redis>, ["~> 3.0"])
       s.add_dependency(%q<simplecov>, ["~> 0.9"])
-      s.add_dependency(%q<rake>, ["~> 10.4"])
+      s.add_dependency(%q<rake>, "~> 12.3")
       s.add_dependency(%q<rspec>, ["~> 3.2"])
       s.add_dependency(%q<rdoc>, ["~> 4.0"])
     end
@@ -48,7 +48,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<kjess>, ["~> 1.2"])
     s.add_dependency(%q<redis>, ["~> 3.0"])
     s.add_dependency(%q<simplecov>, ["~> 0.9"])
-    s.add_dependency(%q<rake>, ["~> 10.4"])
+    s.add_dependency(%q<rake>, "~> 12.3")
     s.add_dependency(%q<rspec>, ["~> 3.2"])
     s.add_dependency(%q<rdoc>, ["~> 4.0"])
   end
